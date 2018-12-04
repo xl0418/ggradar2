@@ -1,7 +1,7 @@
 ggradar2 <- function(plot.data,
-                    base.size=15, 
-                    values.radar = c("0%", "50%", "100%"),                       
-                    axis.labels="",                             
+                    base.size=15,
+                    values.radar = c("0%", "50%", "100%"),
+                    axis.labels="",
                     grid.min=0,  #10,
                     grid.mid=0.5,  #50,
                     grid.max=1,  #100,
@@ -37,12 +37,12 @@ ggradar2 <- function(plot.data,
                     style = "round",
                     polygonfill = TRUE,
                     polygonfill.transparency = 0.2) {
-  
+
   library(ggplot2)
-  
+
   plot.data <- as.data.frame(plot.data)
-  
-  # Check if the group names are given. If not, choose the first column as the 
+
+  # Check if the group names are given. If not, choose the first column as the
   # group name.
   if(is.null(plot.data$group)==FALSE){
     plot.data$group <- as.factor(as.character(plot.data$group))
@@ -50,32 +50,32 @@ ggradar2 <- function(plot.data,
     plot.data[,1] <- as.factor(as.character(plot.data[,1]))
     names(plot.data)[1] <- "group"
   }
-  
+
   col_group = which(colnames(plot.data)=='group')
   # Extract names of the variables from the data frame except the group names.
-  var.names <- colnames(plot.data)[-col_group]  
+  var.names <- colnames(plot.data)[-col_group]
   df_variables <-  plot.data[,-col_group]
-  df_variables <- data.frame(lapply(df_variables, 
+  df_variables <- data.frame(lapply(df_variables,
                                     function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
   plot.data <-  cbind(plot.data$group,df_variables)
   names(plot.data)[1] <- 'group'
-  
+
   # Check if the axis labels are properly set up.
 if(axis.labels == ""){
   axis.labels <- var.names
 }else{
-  if (length(axis.labels) != ncol(plot.data)-1) 
+  if (length(axis.labels) != ncol(plot.data)-1)
     return("Error: 'axis.labels' contains the wrong number of axis labels")
 }
-  
-  
+
+
   #calculate total plot extent as radius of outer circle x a user-specifiable scaling factor
   plot.extent.x=(grid.max+abs(centre.y))*plot.extent.x.sf
   plot.extent.y=(grid.max+abs(centre.y))*plot.extent.y.sf
-  
-  
+
+
   #Declare required internal functions
-  
+
   CalculateGroupPath <- function(df) {
     #Converts variable values into a set of radial x-y coordinates
     #Code adapted from a solution posted by Tony M to
@@ -83,27 +83,27 @@ if(axis.labels == ""){
     #Args:
     #  df: Col 1 -  group ('unique' cluster / group ID of entity)
     #      Col 2-n:  v1.value to vn.value - values (e.g. group/cluser mean or median) of variables v1 to v.n
-    
+
     path <- df[,1]
-    
+
     ##find increment
     angles = seq(from=0, to=2*pi, by=(2*pi)/(ncol(df)-1))
     ##create graph data frame
     graphData= data.frame(seg="", x=0,y=0)
     graphData=graphData[-1,]
-    
+
     for(i in levels(path)){
       pathData = subset(df, df[,1]==i)
       for(j in c(2:ncol(df))){
         #pathData[,j]= pathData[,j]
-        
-        
-        graphData=rbind(graphData, data.frame(group=i, 
+
+
+        graphData=rbind(graphData, data.frame(group=i,
                                               x=pathData[,j]*sin(angles[j-1]),
                                               y=pathData[,j]*cos(angles[j-1])))
       }
       ##complete the path by repeating first pair of coords in the path
-      graphData=rbind(graphData, data.frame(group=i, 
+      graphData=rbind(graphData, data.frame(group=i,
                                             x=pathData[,2]*sin(angles[1]),
                                             y=pathData[,2]*cos(angles[1])))
     }
@@ -146,9 +146,9 @@ if(axis.labels == ""){
     yy <- center[2] + r * sin(tt)
     return(data.frame(x = xx, y = yy))
   }
-  
+
   ### Convert supplied data into plottable format
-  # (a) add abs(centre.y) to supplied plot data 
+  # (a) add abs(centre.y) to supplied plot data
   #[creates plot centroid of 0,0 for internal use, regardless of min. value of y
   # in user-supplied data]
   plot.data.offset <- plot.data
@@ -157,7 +157,7 @@ if(axis.labels == ""){
   # (b) convert into radial coords
   group <-NULL
   group$path <- CalculateGroupPath(plot.data.offset)
-  
+
   #print(group$path)
   # (c) Calculate coordinates required to plot radial variable axes
   axis <- NULL
@@ -195,10 +195,10 @@ if(axis.labels == ""){
   #print(gridline$max$label)
   #print(gridline$mid$label)
   ### Start building up the radar plot
-  
+
   # Declare 'theme_clear', with or without a plot legend as required by user
   #[default = no legend if only 1 group [path] being plotted]
-  theme_clear <- theme_bw(base_size=base.size) + 
+  theme_clear <- theme_bw(base_size=base.size) +
     theme(axis.text.y=element_blank(),
           axis.text.x=element_blank(),
           axis.ticks=element_blank(),
@@ -206,25 +206,25 @@ if(axis.labels == ""){
           panel.grid.minor=element_blank(),
           panel.border=element_blank(),
           legend.key=element_rect(linetype="blank"))
-  
+
 
   #Base-layer = axis labels + plot extent
   # [need to declare plot extent as well, since the axis labels don't always
   # fit within the plot area automatically calculated by ggplot, even if all
   # included in first plot; and in any case the strategy followed here is to first
-  # plot right-justified labels for axis labels to left of Y axis for x< (-x.centre.range)], 
-  # then centred labels for axis labels almost immediately above/below x= 0 
+  # plot right-justified labels for axis labels to left of Y axis for x< (-x.centre.range)],
+  # then centred labels for axis labels almost immediately above/below x= 0
   # [abs(x) < x.centre.range]; then left-justified axis labels to right of Y axis [x>0].
-  # This building up the plot in layers doesn't allow ggplot to correctly 
+  # This building up the plot in layers doesn't allow ggplot to correctly
   # identify plot extent when plotting first (base) layer]
-  
+
   #base layer = axis labels for axes to left of central y-axis [x< -(x.centre.range)]
   base <- ggplot(axis$label) + xlab(NULL) + ylab(NULL) + coord_equal() +
     geom_text(data=subset(axis$label,axis$label$x < (-x.centre.range)),
               aes(x=x,y=y,label=text),size=axis.label.size,hjust=1) +
-    scale_x_continuous(limits=c(-1.5*plot.extent.x,1.5*plot.extent.x)) + 
+    scale_x_continuous(limits=c(-1.5*plot.extent.x,1.5*plot.extent.x)) +
     scale_y_continuous(limits=c(-plot.extent.y,plot.extent.y))
-  
+
 
   if(style == "round"){
     # ... + circular grid-lines at 'min', 'mid' and 'max' y-axis values
@@ -234,7 +234,7 @@ if(axis.labels == ""){
                               lty=gridline.mid.linetype,colour=gridline.mid.colour,size=grid.line.width)
     base <- base +  geom_path(data=gridline$max$path,aes(x=x,y=y),
                               lty=gridline.max.linetype,colour=gridline.max.colour,size=grid.line.width)
-    
+
   }else if(style == "straight"){
     # ... + straight grid-lines at 'min', 'mid' and 'max' y-axis values
       # Extract the coordinates of the inner points and the outer points
@@ -253,12 +253,12 @@ if(axis.labels == ""){
                   lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)+
         geom_path(data = axis$middlepath,aes(x=x,y=y),
                   lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)
-      
+
   }else{
-    return("Error: 'style' should be specified...") 
+    return("Error: 'style' should be specified...")
   }
-  
-  
+
+
   # + axis labels for any vertical axes [abs(x)<=x.centre.range]
   base <- base + geom_text(data=subset(axis$label,abs(axis$label$x)<=x.centre.range),
                            aes(x=x,y=y,label=text),size=axis.label.size,hjust=0.5)
@@ -281,34 +281,36 @@ if(axis.labels == ""){
   }else{
     return("Error: 'style' should be specified...")
   }
-  
-  
+
+
   # + radial axes
   base <- base + geom_path(data=axis$path,aes(x=x,y=y,group=axis.no),
                            colour=axis.line.colour)
-  
+
 
   if(polygonfill){
     base <- base + geom_polygon(data=group$path,aes(x=x,y=y,col = factor(group), fill = factor(group)),
                                 alpha=polygonfill.transparency,show.legend = F)
   }
-  
+
   # ... + group (cluster) 'paths'
   base <- base + geom_path(data=group$path,aes(x=x,y=y,group=group,colour=group),
                            size=group.line.width)
-  
+
   # ... + group points (cluster data)
   base <- base + geom_point(data=group$path,aes(x=x,y=y,group=group,colour=group),size=group.point.size)
-  
-  
-  
+
+
+
   #... + amend Legend title
-  if (plot.legend==TRUE){
-    base  <- base + labs(colour=legend.title,size=legend.text.size)
+  if (plot.legend){
+    base  <- base + labs(colour=legend.title,size=legend.text.size) +
+      theme(legend.text = element_text(size = legend.text.size), legend.position="left") +
+      theme(legend.key.height=unit(2,"line"))
   }else{
     base <- base + theme(legend.position = "none")
   }
-  
+
   # ... + grid-line labels (max; mid; min)
   if (label.gridline.min==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[1]),data=gridline$min$label,size=grid.label.size*0.8, hjust=1) }
   if (label.gridline.mid==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[2]),data=gridline$mid$label,size=grid.label.size*0.8, hjust=1) }
@@ -317,24 +319,22 @@ if(axis.labels == ""){
   if (label.centre.y==TRUE) {
     centre.y.label <- data.frame(x=0, y=0, text=as.character(centre.y))
     base <- base + geom_text(aes(x=x,y=y,label=text),data=centre.y.label,size=grid.label.size, hjust=0.5) }
-  
+
   if (!is.null(group.colours)){
     colour_values=rep(group.colours,100)
   } else {
-    colour_values=rep(c("#FF5A5F", "#FFB400", "#007A87",  "#8CE071", "#7B0051", 
+    colour_values=rep(c("#FF5A5F", "#FFB400", "#007A87",  "#8CE071", "#7B0051",
                         "#00D1C1", "#FFAA91", "#B4A76C", "#9CA299", "#565A5C", "#00A04B", "#E54C20"), 100)
   }
-  
+
   base <- base + theme(legend.key.width=unit(3,"line")) + theme(text = element_text(size = 20)) +
-    theme(legend.text = element_text(size = legend.text.size), legend.position="left") +
-    theme(legend.key.height=unit(2,"line")) +
     scale_colour_manual(values=colour_values) +
     theme(legend.title=element_blank())
-  
+
   if (plot.title != "") {
     base <- base + ggtitle(plot.title)
   }
-  
+
   return(base)
-  
+
 }
