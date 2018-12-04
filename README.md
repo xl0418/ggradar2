@@ -59,4 +59,11 @@ ggradar2(dftest,style = 'straight',polygonfill = FALSE)
 
 ![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/straightnofill.png)
 
+Removing the legend 
+
+```R
+ggradar2(dftest,style = 'straight',polygonfill = FALSE,plot.legend = FALSE)
+```
+
+![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/nolegend.png)
 
