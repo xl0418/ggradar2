@@ -43,7 +43,7 @@ ggradar2(dftest,polygonfill = FALSE)
 
 ![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/roundnofill.png)
 
-A new style chart has been added. Call out the straight style by running 
+A new style has been added. Call out the straight line style by running 
 
 ```R
 ggradar2(dftest,style = 'straight')
