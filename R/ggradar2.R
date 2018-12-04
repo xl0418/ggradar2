@@ -248,11 +248,11 @@ if(axis.labels == ""){
       axis$middlepath <- (axis$innerpath+axis$outerpath)/2
       # Draw the straight path of each layer
       base <- base + geom_path(data = axis$innerpath,aes(x=x,y=y),
-                               lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)+
+                               lty=gridline.min.linetype,colour=gridline.max.colour,size=grid.line.width)+
         geom_path(data = axis$outerpath,aes(x=x,y=y),
                   lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)+
         geom_path(data = axis$middlepath,aes(x=x,y=y),
-                  lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)
+                  lty=gridline.min.linetype,colour=gridline.mid.colour,size=grid.line.width)
 
   }else{
     return("Error: 'style' should be specified...")
