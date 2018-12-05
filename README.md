@@ -64,6 +64,19 @@ ggradar2(dftest,webtype = 'lux')
 
 ![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/lux.png)
 
+
+### gird line trend
+Use `grid.line.trend = 'increase'` to plot an outward-increasing grid lines.
+
+```R
+ggradar2(dftest,style = 'straight',webtype = 'lux',
+              group.line.width = 0.5,grid.line.trend = 'increase',gridline.min.linetype = 'solid',
+              gridline.max.linetype = 'solid',gridline.min.colour = 'black',gridline.max.colour='black')
+```
+
+![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/trend.png)
+
+
 ### Sharp grid
 A new style has been added. Call out the straight line style by running 
 
