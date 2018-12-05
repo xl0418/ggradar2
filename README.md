@@ -65,7 +65,7 @@ ggradar2(dftest,webtype = 'lux')
 ![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/lux.png)
 
 
-### gird line trend
+### Gird line trend
 Use `grid.line.trend = 'increase'` to plot an outward-increasing grid lines.
 
 ```R
