@@ -205,7 +205,7 @@ ggradar2 <- function(plot.data,
   # mini type for web plotting
   if(webtype == 'mini'){
     values.radar <- c("0%", "50%", "100%")
-    grid.mid <- 0.5
+    grid.mid <- (grid.min+grid.max)/2
     # (e) Create Circular grid-lines + labels
     #caclulate the cooridinates required to plot circular grid-lines for three user-specified
     #y-axis values: min, mid and max [grid.min; grid.mid; grid.max]
