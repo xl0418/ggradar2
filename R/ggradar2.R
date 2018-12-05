@@ -37,7 +37,8 @@ ggradar2 <- function(plot.data,
                     style = "round",
                     polygonfill = TRUE,
                     polygonfill.transparency = 0.2,
-                    multiplots = 'none') {
+                    multiplots = 'none',
+                    pannelbackground = TRUE) {
 
   library(ggplot2)
 
@@ -387,6 +388,9 @@ ggradar2 <- function(plot.data,
 
     if (plot.title != "") {
       base <- base + ggtitle(plot.title)
+    }
+    if (pannelbackground==FALSE){
+      base <- base + theme(strip.background = element_blank())
     }
   #base layer = axis labels for axes to left of central y-axis [x< -(x.centre.range)]
 
