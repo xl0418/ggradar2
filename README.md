@@ -77,6 +77,19 @@ ggradar2(dftest,style = 'straight',webtype = 'lux',
 ![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/trend.png)
 
 
+### Full score
+Use `fullscore = c(...)` to set the full scores to each variables.
+
+```R
+fullscore <- c(100,10,300,150,10,10)
+a <- ggradar2(dftest,fullscore = fullscore)
+```
+
+![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/fullscore.png)
+
+
+
+
 ### Sharp grid
 A new style has been added. Call out the straight line style by running 
 
