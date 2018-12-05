@@ -45,7 +45,26 @@ ggradar2(dftest,polygonfill = FALSE)
 
 ![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/roundnofill.png)
 
-### Sharp grid with straight line
+### Web type
+A new web type 'lux' has been added by '''webtype'''
+
+mini type
+
+```R
+ggradar2(dftest,webtype = 'mini')
+```
+
+![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/mini.png)
+
+luxurious type
+
+```R
+ggradar2(dftest,webtype = 'lux')
+```
+
+![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/lux.png)
+
+### Sharp grid
 A new style has been added. Call out the straight line style by running 
 
 ```R
