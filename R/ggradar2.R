@@ -41,8 +41,8 @@ ggradar2 <- function(plot.data,
 
   library(ggplot2)
 
+  # Check if subgroup is given and load the data
   if(multiplots == '1D'){
-    # Check if subgroup is given
     if(length(which(colnames(plot.data) == 'facet1'))==0){
       return('Error: no subgroup is applied.')
     }else{
