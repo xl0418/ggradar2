@@ -84,5 +84,5 @@ facettest <- cbind(facettest,facet1)
 ggradar2(facettest,multiplots = '1D')
 ```
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/multipleplots.png)
+![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/multipleplotsbig.png)
 
