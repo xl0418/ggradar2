@@ -344,9 +344,16 @@ ggradar2 <- function(plot.data,
 
     #... + amend Legend title
     if (plot.legend){
-      base  <- base + labs(colour=legend.title,size=legend.text.size) +
-        theme(legend.text = element_text(size = legend.text.size), legend.position="left") +
-        theme(legend.key.height=unit(2,"line"))
+      if(multiplots=='none'){
+        base  <- base + labs(colour=legend.title,size=legend.text.size) +
+          theme(legend.text = element_text(size = legend.text.size), legend.position="left") +
+          theme(legend.key.height=unit(2,"line"))
+      }else{
+        base  <- base + labs(colour=legend.title,size=legend.text.size) +
+          theme(legend.text = element_text(size = legend.text.size), legend.position="bottom") +
+          theme(legend.key.height=unit(2,"line"))
+      }
+
     }else{
       base <- base + theme(legend.position = "none")
     }
