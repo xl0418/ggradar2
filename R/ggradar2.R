@@ -38,14 +38,15 @@ ggradar2 <- function(plot.data,
                     polygonfill = TRUE,
                     polygonfill.transparency = 0.2,
                     multiplots = 'none',
-                    pannelbackground = TRUE) {
+                    pannelbackground = TRUE,
+                    fullscore = NULL) {
 
   library(ggplot2)
 
   # Check if subgroup is given and load the data
   if(multiplots == '1D'){
     if(length(which(colnames(plot.data) == 'facet1'))==0){
-      return('Error: no subgroup is applied.')
+      return('Error: no facet is applied.')
     }else{
       plot.data <- as.data.frame(plot.data)
       facet1ind <- which(colnames(plot.data) == 'facet1')
@@ -58,6 +59,8 @@ ggradar2 <- function(plot.data,
   }else{
     return("Error: 'multiplots' can be either '1D' for facets plotting or 'none' for single plotting. ")
   }
+
+
   # Check if the group names are given. If not, choose the first column as the
   # group name.
   if(is.null(plot.data$group)==FALSE){
@@ -71,8 +74,19 @@ ggradar2 <- function(plot.data,
   # Extract names of the variables from the data frame except the group names.
   var.names <- colnames(plot.data)[-col_group]
   df_variables <-  plot.data[,-col_group]
+  # Full scores are considered if specified
+  if(length(fullscore) > 0){
+    if(length(fullscore) == ncol(df_variables)){
+      df_variables <- rbind(fullscore,df_variables)
+    }else{
+      return("Error: please provide the same length of 'fullscore' as of the variables.")
+    }
+  }
   df_variables <- data.frame(lapply(df_variables,
                                     function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
+  # Get rid of the full scores as we don't want to plot them
+  df_variables <- df_variables[-1,]
+
   plot.data <-  cbind(plot.data$group,df_variables)
   names(plot.data)[1] <- 'group'
 
