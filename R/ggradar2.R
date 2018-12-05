@@ -42,10 +42,16 @@ ggradar2 <- function(plot.data,
   library(ggplot2)
 
   if(multiplots == '1D'){
-    plot.data <- as.data.frame(plot.data)
-    facet1ind <- which(colnames(plot.data) == 'facet1')
-    facet1df <- plot.data$facet1
-    plot.data <- plot.data[,-facet1ind]
+    # Check if subgroup is given
+    if(length(which(colnames(plot.data) == 'facet1'))==0){
+      return('Error: no subgroup is applied.')
+    }else{
+      plot.data <- as.data.frame(plot.data)
+      facet1ind <- which(colnames(plot.data) == 'facet1')
+      facet1df <- plot.data$facet1
+      facet1df <- factor(facet1df,levels = as.vector(unique(facet1df)))
+      plot.data <- plot.data[,-facet1ind]
+    }
   }else{
     plot.data <- as.data.frame(plot.data)
   }
@@ -92,6 +98,7 @@ ggradar2 <- function(plot.data,
     #      Col 2-n:  v1.value to vn.value - values (e.g. group/cluser mean or median) of variables v1 to v.n
 
     path <- df[,1]
+    path <- factor(path,levels = as.vector(path))
 
     ##find increment
     angles = seq(from=0, to=2*pi, by=(2*pi)/(ncol(df)-1))
@@ -226,7 +233,7 @@ ggradar2 <- function(plot.data,
   # identify plot extent when plotting first (base) layer]
 
   if(multiplots == '1D'){
-    facet_vec <- unique(facet1df)
+    facet_vec <- factor(unique(facet1df),levels = as.vector(unique(facet1df)))
     no.facet <- length(facet_vec)
     multiaxislabel <- cbind(axis$label[rep(seq_len(nrow(axis$label)), no.facet),],rep(facet_vec,each = nrow(axis$label)))
     names(multiaxislabel)[4] <- 'facet1'
