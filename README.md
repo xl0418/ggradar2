@@ -83,6 +83,7 @@ facettest <- cbind(facettest,facet1)
 
 ggradar2(facettest,multiplots = '1D')
 ```
+Notice that the column name for the subgroups should be 'facet1'. Otherwise, ggradar2 could not recognize it.
 
 ![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/multipleplotsbig.png)
 
