@@ -1,9 +1,8 @@
 ggradar2 <- function(plot.data,
                     base.size=15,
-                    values.radar = c("0%", "50%", "100%"),
+                    webtype = 'mini',
                     axis.labels="",
                     grid.min=0,  #10,
-                    grid.mid=0.5,  #50,
                     grid.max=1,  #100,
                     centre.y=grid.min - ((1/9)*(grid.max-grid.min)),
                     plot.extent.x.sf=1,
@@ -37,7 +36,8 @@ ggradar2 <- function(plot.data,
                     style = "round",
                     polygonfill = TRUE,
                     polygonfill.transparency = 0.2,
-                    multiplots = 'none') {
+                    multiplots = 'none',
+                    pannelbackground = TRUE) {
 
   library(ggplot2)
 
@@ -52,8 +52,10 @@ ggradar2 <- function(plot.data,
       facet1df <- factor(facet1df,levels = as.vector(unique(facet1df)))
       plot.data <- plot.data[,-facet1ind]
     }
-  }else{
+  }else if(multiplots == 'none') {
     plot.data <- as.data.frame(plot.data)
+  }else{
+    return("Error: 'multiplots' can be either '1D' for facets plotting or 'none' for single plotting. ")
   }
   # Check if the group names are given. If not, choose the first column as the
   # group name.
@@ -190,24 +192,66 @@ ggradar2 <- function(plot.data,
   axis$label$x <- sapply(1:n.vars, function(i, x) {((grid.max+abs(centre.y))*axis.label.offset)*sin(angles[i])})
   axis$label$y <- sapply(1:n.vars, function(i, x) {((grid.max+abs(centre.y))*axis.label.offset)*cos(angles[i])})
   #print(axis$label)
-  # (e) Create Circular grid-lines + labels
-  #caclulate the cooridinates required to plot circular grid-lines for three user-specified
-  #y-axis values: min, mid and max [grid.min; grid.mid; grid.max]
-  gridline <- NULL
-  gridline$min$path <- funcCircleCoords(c(0,0),grid.min+abs(centre.y),npoints = 360)
-  gridline$mid$path <- funcCircleCoords(c(0,0),grid.mid+abs(centre.y),npoints = 360)
-  gridline$max$path <- funcCircleCoords(c(0,0),grid.max+abs(centre.y),npoints = 360)
-  #print(head(gridline$max$path))
-  #gridline labels
-  gridline$min$label <- data.frame(x=gridline.label.offset,y=grid.min+abs(centre.y),
-                                   text=as.character(grid.min))
-  gridline$max$label <- data.frame(x=gridline.label.offset,y=grid.max+abs(centre.y),
-                                   text=as.character(grid.max))
-  gridline$mid$label <- data.frame(x=gridline.label.offset,y=grid.mid+abs(centre.y),
-                                   text=as.character(grid.mid))
-  #print(gridline$min$label)
-  #print(gridline$max$label)
-  #print(gridline$mid$label)
+
+  # mini type for web plotting
+  if(webtype == 'mini'){
+    values.radar <- c("0%", "50%", "100%")
+    grid.mid <- 0.5
+    # (e) Create Circular grid-lines + labels
+    #caclulate the cooridinates required to plot circular grid-lines for three user-specified
+    #y-axis values: min, mid and max [grid.min; grid.mid; grid.max]
+    gridline <- NULL
+    gridline$min$path <- funcCircleCoords(c(0,0),grid.min+abs(centre.y),npoints = 360)
+    gridline$mid$path <- funcCircleCoords(c(0,0),grid.mid+abs(centre.y),npoints = 360)
+    gridline$max$path <- funcCircleCoords(c(0,0),grid.max+abs(centre.y),npoints = 360)
+
+    #gridline labels
+    gridline$min$label <- data.frame(x=gridline.label.offset,y=grid.min+abs(centre.y),
+                                     text=as.character(grid.min))
+    gridline$max$label <- data.frame(x=gridline.label.offset,y=grid.max+abs(centre.y),
+                                     text=as.character(grid.max))
+    gridline$mid$label <- data.frame(x=gridline.label.offset,y=grid.mid+abs(centre.y),
+                                     text=as.character(grid.mid))
+
+  }else if(webtype == 'lux'){
+    # luxurious web type
+    values.radar <- c("0%", "20%", "40%", "60%", "80%", "100%")
+    grid.mid1 <- 0.2
+    grid.mid2 <- 0.4
+    grid.mid3 <- 0.6
+    grid.mid4 <- 0.8
+
+    # (e) Create Circular grid-lines + labels
+    #caclulate the cooridinates required to plot circular grid-lines for three user-specified
+    #y-axis values: min, mid and max [grid.min; grid.mid; grid.max]
+    gridline <- NULL
+    gridline$min$path <- funcCircleCoords(c(0,0),grid.min+abs(centre.y),npoints = 360)
+    gridline$mid1$path <- funcCircleCoords(c(0,0),grid.mid1+abs(centre.y),npoints = 360)
+    gridline$mid2$path <- funcCircleCoords(c(0,0),grid.mid2+abs(centre.y),npoints = 360)
+    gridline$mid3$path <- funcCircleCoords(c(0,0),grid.mid3+abs(centre.y),npoints = 360)
+    gridline$mid4$path <- funcCircleCoords(c(0,0),grid.mid4+abs(centre.y),npoints = 360)
+    gridline$max$path <- funcCircleCoords(c(0,0),grid.max+abs(centre.y),npoints = 360)
+
+    #gridline labels
+    gridline$min$label <- data.frame(x=gridline.label.offset,y=grid.min+abs(centre.y),
+                                     text=as.character(grid.min))
+    gridline$max$label <- data.frame(x=gridline.label.offset,y=grid.max+abs(centre.y),
+                                     text=as.character(grid.max))
+    gridline$mid1$label <- data.frame(x=gridline.label.offset,y=grid.mid1+abs(centre.y),
+                                     text=as.character(grid.mid1))
+    gridline$mid2$label <- data.frame(x=gridline.label.offset,y=grid.mid2+abs(centre.y),
+                                     text=as.character(grid.mid2))
+    gridline$mid3$label <- data.frame(x=gridline.label.offset,y=grid.mid3+abs(centre.y),
+                                     text=as.character(grid.mid3))
+    gridline$mid4$label <- data.frame(x=gridline.label.offset,y=grid.mid4+abs(centre.y),
+                                     text=as.character(grid.mid4))
+  }else{
+    return("Error: 'webtype' only contains two types ('mini' and 'lux') so far.  ")
+  }
+
+
+
+
   ### Start building up the radar plot
 
   # Declare 'theme_clear', with or without a plot legend as required by user
@@ -242,41 +286,95 @@ ggradar2 <- function(plot.data,
                 aes(x=x,y=y,label=text),size=axis.label.size,hjust=1) +
       scale_x_continuous(limits=c(-1.5*plot.extent.x,1.5*plot.extent.x)) +
       scale_y_continuous(limits=c(-plot.extent.y,plot.extent.y))+facet_wrap(~facet1)
-  }else{
+  }else if(multiplots == 'none'){
     base <- ggplot(axis$label) + xlab(NULL) + ylab(NULL) + coord_equal() +
       geom_text(data=subset(axis$label,axis$label$x < (-x.centre.range)),
                 aes(x=x,y=y,label=text),size=axis.label.size,hjust=1) +
       scale_x_continuous(limits=c(-1.5*plot.extent.x,1.5*plot.extent.x)) +
       scale_y_continuous(limits=c(-plot.extent.y,plot.extent.y))
+  }else{
+    return("Error: 'multiplots' can be either '1D' for facets plotting or 'none' for single plotting. ")
   }
 
     if(style == "round"){
-      # ... + circular grid-lines at 'min', 'mid' and 'max' y-axis values
-      base <- base +  geom_path(data=gridline$min$path,aes(x=x,y=y),
-                                lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)
-      base <- base +  geom_path(data=gridline$mid$path,aes(x=x,y=y),
-                                lty=gridline.mid.linetype,colour=gridline.mid.colour,size=grid.line.width)
-      base <- base +  geom_path(data=gridline$max$path,aes(x=x,y=y),
-                                lty=gridline.max.linetype,colour=gridline.max.colour,size=grid.line.width)
+      if(webtype == 'mini'){
+        # ... + circular grid-lines at 'min', 'mid' and 'max' y-axis values
+        base <- base +  geom_path(data=gridline$min$path,aes(x=x,y=y),
+                                  lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)
+        base <- base +  geom_path(data=gridline$mid$path,aes(x=x,y=y),
+                                  lty=gridline.mid.linetype,colour=gridline.mid.colour,size=grid.line.width)
+        base <- base +  geom_path(data=gridline$max$path,aes(x=x,y=y),
+                                  lty=gridline.max.linetype,colour=gridline.max.colour,size=grid.line.width)
+      }else if(webtype == 'lux'){
+        # ... + circular grid-lines at 'min', 'mid' and 'max' y-axis values
+        base <- base +  geom_path(data=gridline$min$path,aes(x=x,y=y),
+                                  lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)
+        base <- base +  geom_path(data=gridline$mid1$path,aes(x=x,y=y),
+                                  lty=gridline.mid.linetype,colour=gridline.mid.colour,size=grid.line.width)
+        base <- base +  geom_path(data=gridline$mid2$path,aes(x=x,y=y),
+                                  lty=gridline.mid.linetype,colour=gridline.mid.colour,size=grid.line.width)
+        base <- base +  geom_path(data=gridline$mid3$path,aes(x=x,y=y),
+                                  lty=gridline.mid.linetype,colour=gridline.mid.colour,size=grid.line.width)
+        base <- base +  geom_path(data=gridline$mid4$path,aes(x=x,y=y),
+                                  lty=gridline.mid.linetype,colour=gridline.mid.colour,size=grid.line.width)
+        base <- base +  geom_path(data=gridline$max$path,aes(x=x,y=y),
+                                  lty=gridline.max.linetype,colour=gridline.max.colour,size=grid.line.width)
+
+      }else{
+        return("Error: 'webtype' only contains two types ('mini' and 'lux') so far.  ")
+      }
 
     }else if(style == "straight"){
-      # ... + straight grid-lines at 'min', 'mid' and 'max' y-axis values
-      # Extract the coordinates of the inner points and the outer points
-      oddindex <-  seq(1,nrow(axis$path),2)
-      evenindex <- seq(2,nrow(axis$path),2)
-      axis$innerpath <- axis$path[oddindex,]
-      axis$outerpath <- axis$path[evenindex,]
-      axis$innerpath <- rbind(axis$innerpath,head(axis$innerpath,1))
-      axis$outerpath <- rbind(axis$outerpath,head(axis$outerpath,1))
-      # Calculate the coordinates of the middle points
-      axis$middlepath <- (axis$innerpath+axis$outerpath)/2
-      # Draw the straight path of each layer
-      base <- base + geom_path(data = axis$innerpath,aes(x=x,y=y),
-                               lty=gridline.min.linetype,colour=gridline.max.colour,size=grid.line.width)+
-        geom_path(data = axis$outerpath,aes(x=x,y=y),
-                  lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)+
-        geom_path(data = axis$middlepath,aes(x=x,y=y),
-                  lty=gridline.min.linetype,colour=gridline.mid.colour,size=grid.line.width)
+      if(webtype == 'mini'){
+        # ... + straight grid-lines at 'min', 'mid' and 'max' y-axis values
+        # Extract the coordinates of the inner points and the outer points
+        oddindex <-  seq(1,nrow(axis$path),2)
+        evenindex <- seq(2,nrow(axis$path),2)
+        axis$innerpath <- axis$path[oddindex,]
+        axis$outerpath <- axis$path[evenindex,]
+        axis$innerpath <- rbind(axis$innerpath,head(axis$innerpath,1))
+        axis$outerpath <- rbind(axis$outerpath,head(axis$outerpath,1))
+        # Calculate the coordinates of the middle points
+        axis$middlepath <- (axis$innerpath+axis$outerpath)/2
+        # Draw the straight path of each layer
+        base <- base + geom_path(data = axis$innerpath,aes(x=x,y=y),
+                                 lty=gridline.min.linetype,colour=gridline.max.colour,size=grid.line.width)+
+          geom_path(data = axis$outerpath,aes(x=x,y=y),
+                    lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)+
+          geom_path(data = axis$middlepath,aes(x=x,y=y),
+                    lty=gridline.min.linetype,colour=gridline.mid.colour,size=grid.line.width)
+      }else if(webtype == 'lux'){
+        # ... + straight grid-lines at 'min', 'mid' and 'max' y-axis values
+        # Extract the coordinates of the inner points and the outer points
+        oddindex <-  seq(1,nrow(axis$path),2)
+        evenindex <- seq(2,nrow(axis$path),2)
+        axis$innerpath <- axis$path[oddindex,]
+        axis$outerpath <- axis$path[evenindex,]
+        axis$innerpath <- rbind(axis$innerpath,head(axis$innerpath,1))
+        axis$outerpath <- rbind(axis$outerpath,head(axis$outerpath,1))
+        # Calculate the coordinates of the middle points
+        axis$middle1path <- (-axis$innerpath+axis$outerpath)/5+axis$innerpath
+        axis$middle2path <- (-axis$innerpath+axis$outerpath)*2/5+axis$innerpath
+        axis$middle3path <- (-axis$innerpath+axis$outerpath)*3/5+axis$innerpath
+        axis$middle4path <- (-axis$innerpath+axis$outerpath)*4/5+axis$innerpath
+
+        # Draw the straight path of each layer
+        base <- base + geom_path(data = axis$innerpath,aes(x=x,y=y),
+                                 lty=gridline.min.linetype,colour=gridline.max.colour,size=grid.line.width)
+        base <- base + geom_path(data = axis$outerpath,aes(x=x,y=y),
+                    lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width)
+        base <- base +   geom_path(data = axis$middle1path,aes(x=x,y=y),
+                    lty=gridline.min.linetype,colour=gridline.mid.colour,size=grid.line.width)
+        base <- base +   geom_path(data = axis$middle2path,aes(x=x,y=y),
+                    lty=gridline.min.linetype,colour=gridline.mid.colour,size=grid.line.width)
+        base <- base +   geom_path(data = axis$middle3path,aes(x=x,y=y),
+                    lty=gridline.min.linetype,colour=gridline.mid.colour,size=grid.line.width)
+        base <- base +   geom_path(data = axis$middle4path,aes(x=x,y=y),
+                    lty=gridline.min.linetype,colour=gridline.mid.colour,size=grid.line.width)
+
+      }else{
+        return("Error: 'webtype' only contains two types ('mini' and 'lux') so far.  ")
+      }
 
     }else{
       return("Error: 'style' should be specified...")
@@ -331,7 +429,7 @@ ggradar2 <- function(plot.data,
       # ... + group points (cluster data)
       base <- base + geom_point(data=multigrouppath,aes(x=x,y=y,group=group,colour=group),size=group.point.size)+
               facet_wrap(~facet1)
-    }else{
+    }else if(multiplots == 'none'){
       if(polygonfill){
         base <- base + geom_polygon(data=group$path,aes(x=x,y=y,col = factor(group), fill = factor(group)),
                                     alpha=polygonfill.transparency,show.legend = F)
@@ -344,6 +442,8 @@ ggradar2 <- function(plot.data,
       # ... + group points (cluster data)
       base <- base + geom_point(data=group$path,aes(x=x,y=y,group=group,colour=group),size=group.point.size)
 
+    }else{
+      return("Error: 'multiplots' can be either '1D' for facets plotting or 'none' for single plotting. ")
     }
 
 
@@ -355,10 +455,12 @@ ggradar2 <- function(plot.data,
         base  <- base + labs(colour=legend.title,size=legend.text.size) +
           theme(legend.text = element_text(size = legend.text.size), legend.position="left") +
           theme(legend.key.height=unit(2,"line"))
-      }else{
+      }else if(multiplots=='1D'){
         base  <- base + labs(colour=legend.title,size=legend.text.size) +
           theme(legend.text = element_text(size = legend.text.size), legend.position="bottom") +
           theme(legend.key.height=unit(2,"line"))
+      }else{
+        return("Error: 'multiplots' can be either '1D' for facets plotting or 'none' for single plotting. ")
       }
 
     }else{
@@ -366,9 +468,23 @@ ggradar2 <- function(plot.data,
     }
 
     # ... + grid-line labels (max; mid; min)
+
     if (label.gridline.min==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[1]),data=gridline$min$label,size=grid.label.size*0.8, hjust=1) }
-    if (label.gridline.mid==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[2]),data=gridline$mid$label,size=grid.label.size*0.8, hjust=1) }
-    if (label.gridline.max==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[3]),data=gridline$max$label,size=grid.label.size*0.8, hjust=1) }
+    if (label.gridline.max==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[length(values.radar)]),data=gridline$max$label,size=grid.label.size*0.8, hjust=1) }
+
+    if(webtype == 'mini'){
+      if (label.gridline.mid==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[2]),data=gridline$mid$label,size=grid.label.size*0.8, hjust=1) }
+    }else if(webtype == 'lux'){
+      if (label.gridline.mid==TRUE) {
+        base <- base + geom_text(aes(x=x,y=y,label=values.radar[2]),data=gridline$mid1$label,size=grid.label.size*0.8, hjust=1)
+        base <- base + geom_text(aes(x=x,y=y,label=values.radar[3]),data=gridline$mid2$label,size=grid.label.size*0.8, hjust=1)
+        base <- base + geom_text(aes(x=x,y=y,label=values.radar[4]),data=gridline$mid3$label,size=grid.label.size*0.8, hjust=1)
+        base <- base + geom_text(aes(x=x,y=y,label=values.radar[5]),data=gridline$mid4$label,size=grid.label.size*0.8, hjust=1)
+        }
+    }else{
+      return("Error: 'webtype' only contains two types ('mini' and 'lux') so far.  ")
+    }
+
     # ... + centre.y label if required [i.e. value of y at centre of plot circle]
     if (label.centre.y==TRUE) {
       centre.y.label <- data.frame(x=0, y=0, text=as.character(centre.y))
@@ -387,6 +503,9 @@ ggradar2 <- function(plot.data,
 
     if (plot.title != "") {
       base <- base + ggtitle(plot.title)
+    }
+    if (pannelbackground==FALSE){
+      base <- base + theme(strip.background = element_blank())
     }
   #base layer = axis labels for axes to left of central y-axis [x< -(x.centre.range)]
 
