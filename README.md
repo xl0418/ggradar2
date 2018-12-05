@@ -78,7 +78,7 @@ ggradar2(dftest,style = 'straight',webtype = 'lux',
 
 
 ### Full score
-Use `fullscore = c(...)` to set the full scores to each variables.
+Use `fullscore = c(...)` to set the full score to each variable.
 
 ```R
 fullscore <- c(100,10,300,150,10,10)
