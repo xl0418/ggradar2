@@ -22,7 +22,7 @@ ggradar2 <- function(plot.data,
                     label.gridline.min=TRUE,
                     label.gridline.mid=TRUE,
                     label.gridline.max=TRUE,
-                    gridline.label="",
+                    gridline.label=NULL,
                     axis.label.offset=1.15,
                     axis.label.size=5,
                     axis.line.colour="grey",
@@ -75,7 +75,7 @@ ggradar2 <- function(plot.data,
   var.names <- colnames(plot.data)[-col_group]
   df_variables <-  plot.data[,-col_group]
   # Full scores are considered if specified
-  if(length(fullscore) > 0){
+  if(!is.null(fullscore)){
     if(length(fullscore) == ncol(df_variables)){
       df_variables <- rbind(fullscore,df_variables)
     }else{
@@ -84,8 +84,11 @@ ggradar2 <- function(plot.data,
   }
   df_variables <- data.frame(lapply(df_variables,
                                     function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
+
+  if(!is.null(fullscore)){
+    df_variables <- df_variables[-1,]
+  }
   # Get rid of the full scores as we don't want to plot them
-  df_variables <- df_variables[-1,]
 
   plot.data <-  cbind(plot.data$group,df_variables)
   names(plot.data)[1] <- 'group'
@@ -540,6 +543,7 @@ ggradar2 <- function(plot.data,
 
     base <- base + theme(legend.key.width=unit(3,"line")) + theme(text = element_text(size = 20)) +
       scale_colour_manual(values=colour_values) +
+      scale_fill_manual(values = colour_values) +
       theme(legend.title=element_blank())
 
     if (plot.title != "") {
