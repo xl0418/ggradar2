@@ -34,7 +34,7 @@ ggradar2(dftest)
 
 returns 
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/roundfill.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/roundfill.png)
 
 ### No fill with round grid
 If you don't want to fill the polygon, run
@@ -43,7 +43,7 @@ If you don't want to fill the polygon, run
 ggradar2(dftest,polygonfill = FALSE)
 ```
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/roundnofill.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/roundnofill.png)
 
 ### Web type
 A new web type 'lux' has been added by '''webtype'''
@@ -54,7 +54,7 @@ mini type
 ggradar2(dftest,webtype = 'mini')
 ```
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/mini.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/mini.png)
 
 luxurious type
 
@@ -62,7 +62,7 @@ luxurious type
 ggradar2(dftest,webtype = 'lux')
 ```
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/lux.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/lux.png)
 
 
 ### Gird line trend
@@ -74,7 +74,7 @@ ggradar2(dftest,style = 'straight',webtype = 'lux',
               gridline.max.linetype = 'solid',gridline.min.colour = 'black',gridline.max.colour='black')
 ```
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/trend.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/trend.png)
 
 
 ### Full score
@@ -85,7 +85,7 @@ fullscore <- c(100,10,300,150,10,10)
 a <- ggradar2(dftest,fullscore = fullscore)
 ```
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/fullscore.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/fullscore.png)
 
 
 
@@ -97,7 +97,7 @@ A new style has been added. Call out the straight line style by running
 ggradar2(dftest,style = 'straight')
 ```
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/straightfill.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/straightfill.png)
 
 ### Sharp grid without fill
 Get rid of the fill
@@ -106,7 +106,7 @@ Get rid of the fill
 ggradar2(dftest,style = 'straight',polygonfill = FALSE)
 ```
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/straightnofill.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/straightnofill.png)
 
 ### Removing the legend 
 
@@ -114,7 +114,7 @@ ggradar2(dftest,style = 'straight',polygonfill = FALSE)
 ggradar2(dftest,style = 'straight',polygonfill = FALSE,plot.legend = FALSE)
 ```
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/nolegend.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/nolegend.png)
 
 ### Multiple plots by subgroups
 
@@ -130,5 +130,5 @@ ggradar2(facettest,multiplots = '1D')
 ```
 Notice that the column name for the subgroups should be 'facet1'. Otherwise, ggradar2 could not recognize it.
 
-![default](https://github.com/xl0418/ggradar2/blob/master/README_figures/multipleplotsbig.png)
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/multipleplotsbig.png)
 
