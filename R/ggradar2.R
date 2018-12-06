@@ -1,6 +1,6 @@
 ggradar2 <- function(plot.data,
                     base.size=20,
-                    webtype = 'mini',
+                    webtype = "mini",
                     axis.labels="",
                     grid.min=0,  #10,
                     grid.max=1,  #100,
@@ -10,7 +10,7 @@ ggradar2 <- function(plot.data,
                     x.centre.range=0.02*(grid.max-centre.y),
                     label.centre.y=FALSE,
                     grid.line.width=0.5,
-                    grid.line.trend = 'classic',
+                    grid.line.trend = "classic",
                     gridline.min.linetype="longdash",
                     gridline.mid.linetype="longdash",
                     gridline.max.linetype="longdash",
@@ -22,6 +22,7 @@ ggradar2 <- function(plot.data,
                     label.gridline.min=TRUE,
                     label.gridline.mid=TRUE,
                     label.gridline.max=TRUE,
+                    gridline.label="",
                     axis.label.offset=1.15,
                     axis.label.size=5,
                     axis.line.colour="grey",
@@ -34,7 +35,7 @@ ggradar2 <- function(plot.data,
                     plot.legend=TRUE,
                     plot.title="",
                     legend.text.size=14,
-                    style = "round",
+                    radarshape = "round",
                     polygonfill = TRUE,
                     polygonfill.transparency = 0.2,
                     multiplots = 'none',
@@ -218,7 +219,15 @@ ggradar2 <- function(plot.data,
 
   # mini type for web plotting
   if(webtype == 'mini'){
-    values.radar <- c("0%", "50%", "100%")
+    if(length(gridline.label) == 0){
+      values.radar <- c("0%", "50%", "100%")
+    }else{
+      if(length(gridline.label)==3){
+        values.radar <- gridline.label
+      }else{
+        return("Error: 'gridline label' should have the same length as the mini webtype, e.g. 3. ")
+      }
+    }
     grid.mid <- (grid.min+grid.max)/2
     # (e) Create Circular grid-lines + labels
     #caclulate the cooridinates required to plot circular grid-lines for three user-specified
@@ -238,7 +247,16 @@ ggradar2 <- function(plot.data,
 
   }else if(webtype == 'lux'){
     # luxurious web type
-    values.radar <- c("0%", "20%", "40%", "60%", "80%", "100%")
+    if(length(gridline.label) == 0){
+      values.radar <- c("0%", "20%", "40%", "60%", "80%", "100%")
+    }else{
+      if(length(gridline.label)==6){
+        values.radar <- gridline.label
+      }else{
+        return("Error: 'gridline label' should have the same length as the luxurious webtype, e.g. 6. ")
+      }
+    }
+
     grid.mid1 <- 0.2
     grid.mid2 <- 0.4
     grid.mid3 <- 0.6
@@ -320,7 +338,7 @@ ggradar2 <- function(plot.data,
   }
 
 
-  if(style == "round"){
+  if(radarshape == "round"){
     if(webtype == 'mini'){
       # ... + circular grid-lines at 'min', 'mid' and 'max' y-axis values
       base <- base +  geom_path(data=gridline$min$path,aes(x=x,y=y),
@@ -348,7 +366,7 @@ ggradar2 <- function(plot.data,
         return("Error: 'webtype' only contains two types ('mini' and 'lux') so far.  ")
       }
 
-    }else if(style == "straight"){
+    }else if(radarshape == "straight"){
       if(webtype == 'mini'){
         # ... + straight grid-lines at 'min', 'mid' and 'max' y-axis values
         # Extract the coordinates of the inner points and the outer points
@@ -400,7 +418,7 @@ ggradar2 <- function(plot.data,
       }
 
     }else{
-      return("Error: 'style' should be specified...")
+      return("Error: 'radarshape' should be specified...")
     }
 
 
@@ -413,18 +431,18 @@ ggradar2 <- function(plot.data,
     # + theme_clear [to remove grey plot background, grid lines, axis tick marks and axis text]
     base <- base + theme_clear
 
-    if(style == 'round'){
+    if(radarshape == 'round'){
       #  + background circle against which to plot radar data
       base <- base + geom_polygon(data=gridline$max$path,aes(x,y),
                                   fill=background.circle.colour,
                                   alpha=background.circle.transparency)
-    }else if(style == 'straight'){
+    }else if(radarshape == 'straight'){
       #  + background polygon  against which to plot radar data
       base <- base + geom_polygon(data=axis$outerpath,aes(x,y),
                                   fill=background.circle.colour,
                                   alpha=background.circle.transparency)
     }else{
-      return("Error: 'style' should be specified...")
+      return("Error: 'radarshape' should be specified...")
     }
 
 
