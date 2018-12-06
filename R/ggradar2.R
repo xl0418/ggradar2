@@ -85,6 +85,7 @@ ggradar2 <- function(plot.data,
   df_variables <- data.frame(lapply(df_variables,
                                     function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
 
+  # If provided full scores, after rescale the data remove the full score row.
   if(!is.null(fullscore)){
     df_variables <- df_variables[-1,]
   }
