@@ -42,7 +42,6 @@ ggradar2 <- function(plot.data,
                     pannelbackground = TRUE,
                     fullscore = NULL) {
 
-  library(ggplot2)
 
   # Check if subgroup is given and load the data
   if(multiplots == '1D'){
@@ -322,13 +321,13 @@ ggradar2 <- function(plot.data,
     no.facet <- length(facet_vec)
     multiaxislabel <- cbind(axis$label[rep(seq_len(nrow(axis$label)), no.facet),],rep(facet_vec,each = nrow(axis$label)))
     names(multiaxislabel)[4] <- 'facet1'
-    base <- ggplot(multiaxislabel) + xlab(NULL) + ylab(NULL) + coord_equal() +
+    base <- ggplot2::ggplot(multiaxislabel) + xlab(NULL) + ylab(NULL) + coord_equal() +
       geom_text(data=subset(multiaxislabel,multiaxislabel$x < (-x.centre.range)),
                 aes(x=x,y=y,label=text),size=axis.label.size,hjust=1) +
       scale_x_continuous(limits=c(-1.5*plot.extent.x,1.5*plot.extent.x)) +
       scale_y_continuous(limits=c(-plot.extent.y,plot.extent.y))+facet_wrap(~facet1)
   }else if(multiplots == 'none'){
-    base <- ggplot(axis$label) + xlab(NULL) + ylab(NULL) + coord_equal() +
+    base <- ggplot2::ggplot(axis$label) + xlab(NULL) + ylab(NULL) + coord_equal() +
       geom_text(data=subset(axis$label,axis$label$x < (-x.centre.range)),
                 aes(x=x,y=y,label=text),size=axis.label.size,hjust=1) +
       scale_x_continuous(limits=c(-1.5*plot.extent.x,1.5*plot.extent.x)) +
