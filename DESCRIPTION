@@ -2,10 +2,14 @@ Package: ggradar2
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Author: Liang Xu
+Maintainer: Liang Xu <xl0418@gmail.com>
+Description: ggradar2 is a plot function to draw a radar chart for data analysis.
+It is inspired from ggradar. I have extended it with more cool features and made it more 
+friendly with the data. It allows users to customize almost any factors in the radar chart.
+Moreover, facet plotting is implemented in the package. See details
+in examples.
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: GPL
 Encoding: UTF-8
 LazyData: true
