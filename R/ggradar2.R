@@ -29,6 +29,7 @@ ggradar2 <- function(plot.data,
                     group.line.width=1.5,
                     group.point.size=3,
                     group.colours=NULL,
+                    group.fill.colours=NULL,
                     background.circle.colour="#D7D6D1",
                     background.circle.transparency=0.2,
                     legend.title="",
@@ -536,15 +537,21 @@ ggradar2 <- function(plot.data,
       }
 
     if (!is.null(group.colours)){
-      colour_values=rep(group.colours,100)
+      colour_values <- rep(group.colours,100)
+      if (!is.null(group.fill.colours)){
+        fill_values <- rep(group.fill.colours,100)
+      }else{
+        fill_values <- colour_values
+      }
     } else {
-      colour_values=rep(c("#FF5A5F", "#FFB400", "#007A87",  "#8CE071", "#7B0051",
+      colour_values <- rep(c("#FF5A5F", "#FFB400", "#007A87",  "#8CE071", "#7B0051",
                           "#00D1C1", "#FFAA91", "#B4A76C", "#9CA299", "#565A5C", "#00A04B", "#E54C20"), 100)
+      fill_values <- colour_values
     }
 
     base <- base + theme(legend.key.width=unit(3,"line")) + theme(text = element_text(size = 20)) +
       scale_colour_manual(values=colour_values) +
-      scale_fill_manual(values = colour_values) +
+      scale_fill_manual(values = fill_values) +
       theme(legend.title=element_blank())
 
     if (plot.title != "") {
