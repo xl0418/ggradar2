@@ -44,7 +44,7 @@ ggradar2 <- function(plot.data,
                     fullscore = NULL) {
 
 
-  # Check if subgroup is given and load the data
+  # Load the data and check if subgroup is given
   if(multiplots == '1D'){
     if(length(which(colnames(plot.data) == 'facet1'))==0){
       return('Error: no facet is applied.')
