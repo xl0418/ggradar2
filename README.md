@@ -24,6 +24,10 @@ dftest = head(df,4)
 dftest = dftest[,1:7]
 ```
 
+## Help document
+The interpretation of the arguments are listed [here](https://xl0418.github.io/2018/12/07/2018-12-07-ggradar2helpdocument/).
+
+
 ## Radar charts gallery
 ### Default style
 By default
