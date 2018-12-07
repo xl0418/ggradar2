@@ -5,9 +5,6 @@ ggradar2 <- function(plot.data,
                     grid.min=0,  #10,
                     grid.max=1,  #100,
                     centre.y=grid.min - ((1/9)*(grid.max-grid.min)),
-                    plot.extent.x.sf=1,
-                    plot.extent.y.sf=1.2,
-                    x.centre.range=0.02*(grid.max-centre.y),
                     label.centre.y=FALSE,
                     grid.line.width=0.5,
                     grid.line.trend = "classic",
@@ -43,6 +40,10 @@ ggradar2 <- function(plot.data,
                     pannelbackground = TRUE,
                     fullscore = NULL) {
 
+  # Default settings
+  plot.extent.x.sf=1
+  plot.extent.y.sf=1.2
+  x.centre.range=0.02*(grid.max-centre.y)
 
   # Load the data and check if subgroup is given
   if(multiplots == '1D'){
@@ -67,7 +68,7 @@ ggradar2 <- function(plot.data,
   if(!is.null(plot.data$group)){
     plot.data$group <- as.factor(as.character(plot.data$group))
   }else{
-    groupcheck <- readline(" 'group' column is not detected. The first column will be chosen as the group name. Yes/no? (y/n)")
+    groupcheck <- readline(" WARNING: 'group' column is not detected. The first column will be chosen as the group name. Yes/no? (y/n)")
     if(groupcheck == 'y'){
       plot.data[,1] <- as.factor(as.character(plot.data[,1]))
       names(plot.data)[1] <- "group"
@@ -120,6 +121,8 @@ ggradar2 <- function(plot.data,
     grid.line.width <- seq(from = grid.line.width, to = grid.line.width+5*0.2,by=0.2)
   }else if(grid.line.trend == 'classic'){
     grid.line.width <- rep(grid.line.width,6)
+  }else if(grid.line.trend == 'decrease'){
+    grid.line.width <- rev(seq(from = grid.line.width, to = grid.line.width+5*0.2,by=0.2))
   }else{
     return("Error: 'grid.line.trend' so far only contains two types, e.g. 'classic' and 'increase' ")
   }
