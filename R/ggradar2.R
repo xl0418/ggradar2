@@ -64,11 +64,18 @@ ggradar2 <- function(plot.data,
 
   # Check if the group names are given. If not, choose the first column as the
   # group name.
-  if(is.null(plot.data$group)==FALSE){
+  if(!is.null(plot.data$group)){
     plot.data$group <- as.factor(as.character(plot.data$group))
   }else{
-    plot.data[,1] <- as.factor(as.character(plot.data[,1]))
-    names(plot.data)[1] <- "group"
+    groupcheck <- readline(" 'group' column is not detected. The first column will be chosen as the group name. Yes/no? (y/n)")
+    if(groupcheck == 'y'){
+      plot.data[,1] <- as.factor(as.character(plot.data[,1]))
+      names(plot.data)[1] <- "group"
+    }else{
+      print(" Abort! Data check failed! ")
+      return(" Abort! Data check failed! ")
+    }
+
   }
 
   col_group = which(colnames(plot.data)=='group')
