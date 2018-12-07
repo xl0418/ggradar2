@@ -1,5 +1,5 @@
 # ggradar2
-ggradar2 is a gg-function to draw a radar plot for data analysis. It is based on [ggradar](https://github.com/ricardo-bion/ggradar) by Ricardo Bion and [CreateRadialPlot](http://rstudio-pubs-static.s3.amazonaws.com/5795_e6e6411731bb4f1b9cc7eb49499c2082.html) by Paul Williamson. It has been extended with more features and functionality. 
+ggradar2 is a gg-function to draw a radar plot for data analysis. It is based on [ggradar](https://github.com/ricardo-bion/ggradar) by Ricardo Bion and [CreateRadialPlot](http://rstudio-pubs-static.s3.amazonaws.com/5795_e6e6411731bb4f1b9cc7eb49499c2082.html) by Paul Williamson. It has been extended with more features and functionalities. 
 
 # Install ggradar2
 Run the code 
