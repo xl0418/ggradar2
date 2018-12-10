@@ -1,3 +1,7 @@
+#' ggradar2
+#' @author Liang Xu
+#' @export ggradar2
+#'
 #' @export
 ggradar2 <- function(plot.data,
                     base.size=20,
