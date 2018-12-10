@@ -73,7 +73,7 @@ ggradar2(dftest,webtype = 'lux')
 Use `grid.line.trend = 'increase'` to plot an outward-increasing grid lines.
 
 ```R
-ggradar2(dftest,style = 'straight',webtype = 'lux',
+ggradar2(dftest,style = 'sharp',webtype = 'lux',
               group.line.width = 0.5,grid.line.trend = 'increase',gridline.min.linetype = 'solid',
               gridline.max.linetype = 'solid',gridline.min.colour = 'black',gridline.max.colour='black')
 ```
@@ -98,7 +98,7 @@ a <- ggradar2(dftest,fullscore = fullscore)
 A new style has been added. Call out the straight line style by running 
 
 ```R
-ggradar2(dftest,style = 'straight')
+ggradar2(dftest,style = 'sharp')
 ```
 
 ![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/straightfill.png)
@@ -107,7 +107,7 @@ ggradar2(dftest,style = 'straight')
 Get rid of the fill
 
 ```R
-ggradar2(dftest,style = 'straight',polygonfill = FALSE)
+ggradar2(dftest,style = 'sharp',polygonfill = FALSE)
 ```
 
 ![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/straightnofill.png)
@@ -115,7 +115,7 @@ ggradar2(dftest,style = 'straight',polygonfill = FALSE)
 ### Removing the legend 
 
 ```R
-ggradar2(dftest,style = 'straight',polygonfill = FALSE,plot.legend = FALSE)
+ggradar2(dftest,style = 'sharp',polygonfill = FALSE,plot.legend = FALSE)
 ```
 
 ![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/nolegend.png)
