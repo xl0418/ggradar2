@@ -1,3 +1,4 @@
+#' @export
 ggradar2 <- function(plot.data,
                     base.size=20,
                     webtype = "mini",

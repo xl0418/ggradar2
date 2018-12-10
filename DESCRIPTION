@@ -1,6 +1,6 @@
 Package: ggradar2
 Type: Package
-Title: A function to plot a radar chart.
+Title: A function to plot a radar chart
 Version: 0.1.0
 Author: Liang Xu
 Maintainer: Liang Xu <xl0418@gmail.com>
