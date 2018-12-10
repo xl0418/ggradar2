@@ -385,9 +385,9 @@ ggradar2 <- function(plot.data,
         return("Error: 'webtype' only contains two types ('mini' and 'lux') so far.  ")
       }
 
-    }else if(radarshape == "straight"){
+    }else if(radarshape == "sharp"){
       if(webtype == 'mini'){
-        # ... + straight grid-lines at 'min', 'mid' and 'max' y-axis values
+        # ... + sharp grid-lines at 'min', 'mid' and 'max' y-axis values
         # Extract the coordinates of the inner points and the outer points
         oddindex <-  seq(1,nrow(axis$path),2)
         evenindex <- seq(2,nrow(axis$path),2)
@@ -397,7 +397,7 @@ ggradar2 <- function(plot.data,
         axis$outerpath <- rbind(axis$outerpath,head(axis$outerpath,1))
         # Calculate the coordinates of the middle points
         axis$middlepath <- (axis$innerpath+axis$outerpath)/2
-        # Draw the straight path of each layer
+        # Draw the sharp path of each layer
         base <- base + geom_path(data = axis$innerpath,aes(x=x,y=y),
                                  lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width[1])+
           geom_path(data = axis$outerpath,aes(x=x,y=y),
@@ -405,7 +405,7 @@ ggradar2 <- function(plot.data,
           geom_path(data = axis$middlepath,aes(x=x,y=y),
                     lty=gridline.mid.linetype,colour=gridline.mid.colour,size=grid.line.width[2])
       }else if(webtype == 'lux'){
-        # ... + straight grid-lines at 'min', 'mid' and 'max' y-axis values
+        # ... + sharp grid-lines at 'min', 'mid' and 'max' y-axis values
         # Extract the coordinates of the inner points and the outer points
         oddindex <-  seq(1,nrow(axis$path),2)
         evenindex <- seq(2,nrow(axis$path),2)
@@ -419,7 +419,7 @@ ggradar2 <- function(plot.data,
         axis$middle3path <- (-axis$innerpath+axis$outerpath)*3/5+axis$innerpath
         axis$middle4path <- (-axis$innerpath+axis$outerpath)*4/5+axis$innerpath
 
-        # Draw the straight path of each layer
+        # Draw the sharp path of each layer
         base <- base + geom_path(data = axis$innerpath,aes(x=x,y=y),
                                  lty=gridline.min.linetype,colour=gridline.min.colour,size=grid.line.width[1])
         base <- base +   geom_path(data = axis$middle1path,aes(x=x,y=y),
@@ -455,7 +455,7 @@ ggradar2 <- function(plot.data,
       base <- base + geom_polygon(data=gridline$max$path,aes(x,y),
                                   fill=background.circle.colour,
                                   alpha=background.circle.transparency)
-    }else if(radarshape == 'straight'){
+    }else if(radarshape == 'sharp'){
       #  + background polygon  against which to plot radar data
       base <- base + geom_polygon(data=axis$outerpath,aes(x,y),
                                   fill=background.circle.colour,
