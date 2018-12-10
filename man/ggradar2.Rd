@@ -25,8 +25,83 @@ ggradar2(plot.data, base.size = 20, webtype = "mini",
   polygonfill.transparency = 0.2, multiplots = "none",
   stripbackground = TRUE, fullscore = NULL)
 }
+\arguments{
+\item{plot.data}{The input data should be in the data.frame format with columns named. The values in the data are supposed to be numeric. The ‘group’ column is suggested to included in your data. ggradar2 now can smartly detect if ‘group’ is correctly provided. If not, you will be asked if the first column is allowed to be defined as the group column. If you want to plot multiple plots against some subgroups, please specify it in the column data$facet1.}
+
+\item{base.size}{The size of radar chart. The default value is 20.}
+
+\item{webtype}{Value "mini" sets a web type with 3 grid lines while "lux" sets a type with 5 grid lines. Default setting is "mini".}
+
+\item{axis.labels}{The label of each column in your data is plotted around the radar.}
+
+\item{grid.min, grid.max}{Rescale your values in this range.}
+
+\item{centre.y}{The radius of inner circle.}
+
+\item{label.centre.y}{TRUE prints the central value. FALSE turns it off.}
+
+\item{grid.line.width}{The width of grid lines.}
+
+\item{grid.line.trend}{"classic" sets equal width of the grid lines. "increase" sets an outward-increasing width of the grid lines. "decrease" sets an outward-decreasing width of the grid lines.}
+
+\item{gridline.min.linetype, gridline.mid.linetype, gridline.max.linetype}{Set the grid line type for the inner, middle and outer circles. The default setting is "longdash".}
+
+\item{gridline.min.colour, gridline.mid.colour, gridline.max.colour}{Set the colors for the inner, middle and outer circles. The default settings are "grey", "#007A87", "grey".}
+
+\item{grid.label.size}{Set the size of grid labels.}
+
+\item{gridline.label.offset}{The offset of grid labels.}
+
+\item{label.gridline.min, label.gridline.mid, label.gridline.max}{Turn on/off the labels at the inner grid, middle grid and outer grid.}
+
+\item{gridline.label}{The default setting is the percentage. Replace it with your labels.}
+
+\item{axis.label.offset}{The offset of axis labels.}
+
+\item{axis.label.size}{The size of axis labels.}
+
+\item{axis.line.colour}{The color of axis labels.}
+
+\item{group.line.width}{The width of group lines.}
+
+\item{group.point.size}{The size of the point in each axis for group lines.}
+
+\item{group.colours}{Set colors for the group lines.}
+
+\item{group.fill.colours}{The colors of polygon fills.}
+
+\item{background.circle.colour}{The background color for the radar.}
+
+\item{background.circle.transparency}{The transparency of the background.}
+
+\item{legend.title}{Legend title.}
+
+\item{plot.legend}{TRUE/FALSE.}
+
+\item{plot.title}{Plot title.}
+
+\item{legend.text.size}{The size of the legend text.}
+
+\item{radarshape}{"round" gives you a round radar. "sharp" gives you a sharp radar.}
+
+\item{polygonfill}{Turn on/off the polygon fill. TRUE/FALSE.}
+
+\item{polygonfill.transparency}{The transparency of polygon fills.}
+
+\item{multiplots}{Turn on/off multi-plotting function. If on, data$facet1 column should be included in your data. '1D' denotes on.}
+
+\item{stripbackground}{Turn on/off the background for the panels of multiple plots.}
+
+\item{fullscore}{Set full scores to your values.}
+}
 \description{
 ggradar2
+}
+\examples{
+library(ggradar2)
+library(ggplot2)
+data(mtcars)
+ggradar2(mtcars)
 }
 \author{
 Liang Xu
