@@ -115,8 +115,9 @@ ggradar2 <- function(plot.data,
     plot.data$group <- as.factor(as.character(plot.data$group))
   }else if(!is.null(rownames(plot.data))){
     plot.data$group <- rownames(plot.data)
+    print("Row names are chosen as the group names.")
   }else{
-    groupcheck <- readline(" WARNING: 'group' column is not detected. The first column will be chosen as the group name. Yes/no? (y/n)")
+    groupcheck <- readline(" WARNING: 'group' column and row names are not detected. The first column will be chosen as the group name. Yes/no? (y/n)")
     if(groupcheck == y){
       plot.data[,1] <- as.factor(as.character(plot.data[,1]))
       names(plot.data)[1] <- "group"
