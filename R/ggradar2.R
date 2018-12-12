@@ -25,7 +25,7 @@
 #' @param background.circle.colour The background color for the radar.
 #' @param background.circle.transparency The transparency of the background.
 #' @param radarshape "round" gives you a round radar. "sharp" gives you a sharp radar.
-#' @param multiplots Turn on/off multi-plotting function. If on, data$facet1 column should be included in your data. '1D' denotes on.
+#' @param multiplots Turn on/off multi-plotting function. If on, data$facet1 column should be included in your data. TRUE/FALSE
 #' @param fullscore Set full scores to your values.
 #' @param stripbackground Turn on/off the background for the panels of multiple plots.
 #' @param legend.title Legend title.
@@ -82,7 +82,7 @@ ggradar2 <- function(plot.data,
                     radarshape = "round",
                     polygonfill = TRUE,
                     polygonfill.transparency = 0.2,
-                    multiplots = 'none',
+                    multiplots = FALSE,
                     stripbackground = TRUE,
                     fullscore = NULL) {
 
@@ -92,7 +92,7 @@ ggradar2 <- function(plot.data,
   x.centre.range=0.02*(grid.max-centre.y)
 
   # Load the data and check if subgroup is given
-  if(multiplots == '1D'){
+  if(multiplots){
     if(length(which(colnames(plot.data) == 'facet1'))==0){
       return('Error: no facet is applied.')
     }else{
@@ -102,7 +102,7 @@ ggradar2 <- function(plot.data,
       facet1df <- factor(facet1df,levels = as.vector(unique(facet1df)))
       plot.data <- plot.data[,-facet1ind]
     }
-  }else if(multiplots == 'none') {
+  }else if(multiplots == FALSE) {
     plot.data <- as.data.frame(plot.data)
   }else{
     return("Error: 'multiplots' can be either '1D' for facets plotting or 'none' for single plotting. ")
@@ -380,7 +380,7 @@ ggradar2 <- function(plot.data,
   # This building up the plot in layers doesn't allow ggplot to correctly
   # identify plot extent when plotting first (base) layer]
 
-  if(multiplots == '1D'){
+  if(multiplots){
     facet_vec <- factor(unique(facet1df),levels = as.vector(unique(facet1df)))
     no.facet <- length(facet_vec)
     multiaxislabel <- cbind(axis$label[rep(seq_len(nrow(axis$label)), no.facet),],rep(facet_vec,each = nrow(axis$label)))
@@ -390,7 +390,7 @@ ggradar2 <- function(plot.data,
                 aes(x=x,y=y,label=text),size=axis.label.size,hjust=1) +
       scale_x_continuous(limits=c(-1.5*plot.extent.x,1.5*plot.extent.x)) +
       scale_y_continuous(limits=c(-plot.extent.y,plot.extent.y))+facet_wrap(~facet1)
-  }else if(multiplots == 'none'){
+  }else if(multiplots == FALSE){
     base <- ggplot2::ggplot(axis$label) + xlab(NULL) + ylab(NULL) + coord_equal() +
       geom_text(data=subset(axis$label,axis$label$x < (-x.centre.range)),
                 aes(x=x,y=y,label=text),size=axis.label.size,hjust=1) +
@@ -514,7 +514,7 @@ ggradar2 <- function(plot.data,
                              colour=axis.line.colour)
 
     # Draw path for different facets.
-    if(multiplots == '1D'){
+    if(multiplots){
 
       multigrouppath <- cbind(group$path,rep(facet1df,each=nrow(group$path)/nrow(plot.data)))
       names(multigrouppath)[4] <- 'facet1'
@@ -533,7 +533,7 @@ ggradar2 <- function(plot.data,
       # ... + group points (cluster data)
       base <- base + geom_point(data=multigrouppath,aes(x=x,y=y,group=group,colour=group),size=group.point.size)+
               facet_wrap(~facet1)
-    }else if(multiplots == 'none'){
+    }else if(multiplots == FALSE){
       if(polygonfill){
         base <- base + geom_polygon(data=group$path,aes(x=x,y=y,col = factor(group), fill = factor(group)),
                                     alpha=polygonfill.transparency,show.legend = F)
@@ -555,11 +555,11 @@ ggradar2 <- function(plot.data,
 
     #... + amend Legend title
     if (plot.legend){
-      if(multiplots=='none'){
+      if(multiplots== FALSE){
         base  <- base + labs(colour=legend.title,size=legend.text.size) +
           theme(legend.text = element_text(size = legend.text.size), legend.position="left") +
           theme(legend.key.height=unit(2,"line"))
-      }else if(multiplots=='1D'){
+      }else if(multiplots){
         base  <- base + labs(colour=legend.title,size=legend.text.size) +
           theme(legend.text = element_text(size = legend.text.size), legend.position="bottom") +
           theme(legend.key.height=unit(2,"line"))
