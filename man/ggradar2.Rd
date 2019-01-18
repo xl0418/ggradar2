@@ -22,7 +22,7 @@ ggradar2(plot.data, base.size = 20, webtype = "mini",
   background.circle.transparency = 0.2, legend.title = "",
   plot.legend = TRUE, plot.title = "", legend.text.size = 14,
   radarshape = "round", polygonfill = TRUE,
-  polygonfill.transparency = 0.2, multiplots = "none",
+  polygonfill.transparency = 0.2, multiplots = FALSE,
   stripbackground = TRUE, fullscore = NULL)
 }
 \arguments{
@@ -88,7 +88,7 @@ ggradar2(plot.data, base.size = 20, webtype = "mini",
 
 \item{polygonfill.transparency}{The transparency of polygon fills.}
 
-\item{multiplots}{Turn on/off multi-plotting function. If on, data$facet1 column should be included in your data. '1D' denotes on.}
+\item{multiplots}{Turn on/off multi-plotting function. If on, data$facet1 column should be included in your data. TRUE/FALSE}
 
 \item{stripbackground}{Turn on/off the background for the panels of multiple plots.}
 
