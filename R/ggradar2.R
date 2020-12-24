@@ -153,7 +153,7 @@ ggradar2 <- function(plot.data,
   names(plot.data)[1] <- 'group'
 
   # Check if the axis labels are properly set up.
-  if(axis.labels == ""){
+  if(length(axis.labels) == 1 && axis.labels == ""){
     axis.labels <- var.names
   }else{
     if (length(axis.labels) != ncol(plot.data)-1)
