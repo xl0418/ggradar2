@@ -33,6 +33,7 @@
 #' @param plot.title Plot title.
 #' @param legend.text.size The size of the legend text.
 #' @param label.gridline.min,label.gridline.mid,label.gridline.max Turn on/off the labels at the inner grid, middle grid and outer grid.
+#' @param axis.label.color,grid.label.color Change the colors of the axis labels and grid labels.
 #' @author Liang Xu
 #' @examples
 #' library(ggradar2)

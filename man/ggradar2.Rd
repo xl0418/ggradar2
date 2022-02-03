@@ -4,26 +4,51 @@
 \alias{ggradar2}
 \title{ggradar2}
 \usage{
-ggradar2(plot.data, base.size = 20, webtype = "mini",
-  axis.labels = "", grid.min = 0, grid.max = 1, centre.y = grid.min
-  - ((1/9) * (grid.max - grid.min)), label.centre.y = FALSE,
-  grid.line.width = 0.5, grid.line.trend = "classic",
+ggradar2(
+  plot.data,
+  base.size = 20,
+  webtype = "mini",
+  axis.labels = "",
+  grid.min = 0,
+  grid.max = 1,
+  centre.y = grid.min - ((1/9) * (grid.max - grid.min)),
+  label.centre.y = FALSE,
+  grid.line.width = 0.5,
+  grid.line.trend = "classic",
   gridline.min.linetype = "longdash",
   gridline.mid.linetype = "longdash",
-  gridline.max.linetype = "longdash", gridline.min.colour = "grey",
-  gridline.mid.colour = "#007A87", gridline.max.colour = "grey",
-  grid.label.size = 6, gridline.label.offset = -0.1 * (grid.max -
-  centre.y), label.gridline.min = TRUE, label.gridline.mid = TRUE,
-  label.gridline.max = TRUE, gridline.label = NULL,
-  axis.label.offset = 1.15, axis.label.size = 5,
-  axis.line.colour = "grey", group.line.width = 1.5,
-  group.point.size = 3, group.colours = NULL,
-  group.fill.colours = NULL, background.circle.colour = "#D7D6D1",
-  background.circle.transparency = 0.2, legend.title = "",
-  plot.legend = TRUE, plot.title = "", legend.text.size = 14,
-  radarshape = "round", polygonfill = TRUE,
-  polygonfill.transparency = 0.2, multiplots = FALSE,
-  stripbackground = TRUE, fullscore = NULL)
+  gridline.max.linetype = "longdash",
+  gridline.min.colour = "grey",
+  gridline.mid.colour = "#007A87",
+  gridline.max.colour = "grey",
+  grid.label.size = 6,
+  gridline.label.offset = -0.1 * (grid.max - centre.y),
+  label.gridline.min = TRUE,
+  label.gridline.mid = TRUE,
+  label.gridline.max = TRUE,
+  gridline.label = NULL,
+  axis.label.offset = 1.15,
+  axis.label.size = 5,
+  axis.line.colour = "grey",
+  group.line.width = 1.5,
+  group.point.size = 3,
+  group.colours = NULL,
+  group.fill.colours = NULL,
+  background.circle.colour = "#D7D6D1",
+  background.circle.transparency = 0.2,
+  legend.title = "",
+  plot.legend = TRUE,
+  plot.title = "",
+  legend.text.size = 14,
+  radarshape = "round",
+  polygonfill = TRUE,
+  polygonfill.transparency = 0.2,
+  multiplots = FALSE,
+  stripbackground = TRUE,
+  fullscore = NULL,
+  axis.labels.color = "black",
+  grid.labels.color = "black"
+)
 }
 \arguments{
 \item{plot.data}{The input data should be in the data.frame format with columns named. The values in the data are supposed to be numeric. The ‘group’ column is suggested to included in your data. ggradar2 now can smartly detect if ‘group’ is correctly provided. If not, you will be asked if the first column is allowed to be defined as the group column. If you want to plot multiple plots against some subgroups, please specify it in the column data$facet1.}
@@ -93,6 +118,8 @@ ggradar2(plot.data, base.size = 20, webtype = "mini",
 \item{stripbackground}{Turn on/off the background for the panels of multiple plots.}
 
 \item{fullscore}{Set full scores to your values.}
+
+\item{axis.label.color, grid.label.color}{Change the colors of the axis labels and grid labels.}
 }
 \description{
 ggradar2
