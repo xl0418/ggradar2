@@ -84,7 +84,9 @@ ggradar2 <- function(plot.data,
                     polygonfill.transparency = 0.2,
                     multiplots = FALSE,
                     stripbackground = TRUE,
-                    fullscore = NULL) {
+                    fullscore = NULL,
+                    axis.labels.color = "black",
+                    grid.labels.color = "black") {
 
   # Default settings
   plot.extent.x.sf=1
@@ -387,13 +389,13 @@ ggradar2 <- function(plot.data,
     names(multiaxislabel)[4] <- 'facet1'
     base <- ggplot2::ggplot(multiaxislabel) + xlab(NULL) + ylab(NULL) + coord_equal() +
       geom_text(data=subset(multiaxislabel,multiaxislabel$x < (-x.centre.range)),
-                aes(x=x,y=y,label=text),size=axis.label.size,hjust=1) +
+                aes(x=x,y=y,label=text),size=axis.label.size,hjust=1, color = axis.labels.color) +
       scale_x_continuous(limits=c(-1.5*plot.extent.x,1.5*plot.extent.x)) +
       scale_y_continuous(limits=c(-plot.extent.y,plot.extent.y))+facet_wrap(~facet1)
   }else if(multiplots == FALSE){
     base <- ggplot2::ggplot(axis$label) + xlab(NULL) + ylab(NULL) + coord_equal() +
       geom_text(data=subset(axis$label,axis$label$x < (-x.centre.range)),
-                aes(x=x,y=y,label=text),size=axis.label.size,hjust=1) +
+                aes(x=x,y=y,label=text),size=axis.label.size,hjust=1, color = axis.labels.color) +
       scale_x_continuous(limits=c(-1.5*plot.extent.x,1.5*plot.extent.x)) +
       scale_y_continuous(limits=c(-plot.extent.y,plot.extent.y))
   }else{
@@ -487,10 +489,10 @@ ggradar2 <- function(plot.data,
 
     # + axis labels for any vertical axes [abs(x)<=x.centre.range]
     base <- base + geom_text(data=subset(axis$label,abs(axis$label$x)<=x.centre.range),
-                             aes(x=x,y=y,label=text),size=axis.label.size,hjust=0.5)
+                             aes(x=x,y=y,label=text),size=axis.label.size,hjust=0.5, color = axis.labels.color)
     # + axis labels for any vertical axes [x>x.centre.range]
     base <- base + geom_text(data=subset(axis$label,axis$label$x>x.centre.range),
-                             aes(x=x,y=y,label=text),size=axis.label.size,hjust=0)
+                             aes(x=x,y=y,label=text),size=axis.label.size,hjust=0, color = axis.labels.color)
     # + theme_clear [to remove grey plot background, grid lines, axis tick marks and axis text]
     base <- base + theme_clear
 
@@ -573,17 +575,17 @@ ggradar2 <- function(plot.data,
 
     # ... + grid-line labels (max; mid; min)
 
-    if (label.gridline.min==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[1]),data=gridline$min$label,size=grid.label.size*0.8, hjust=1) }
-    if (label.gridline.max==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[length(values.radar)]),data=gridline$max$label,size=grid.label.size*0.8, hjust=1) }
+    if (label.gridline.min==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[1]),data=gridline$min$label,size=grid.label.size*0.8, hjust=1, color = grid.labels.color) }
+    if (label.gridline.max==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[length(values.radar)]),data=gridline$max$label,size=grid.label.size*0.8, hjust=1, color = grid.labels.color) }
 
     if(webtype == 'mini'){
-      if (label.gridline.mid==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[2]),data=gridline$mid$label,size=grid.label.size*0.8, hjust=1) }
+      if (label.gridline.mid==TRUE) { base <- base + geom_text(aes(x=x,y=y,label=values.radar[2]),data=gridline$mid$label,size=grid.label.size*0.8, hjust=1, color = grid.labels.color) }
     }else if(webtype == 'lux'){
       if (label.gridline.mid==TRUE) {
-        base <- base + geom_text(aes(x=x,y=y,label=values.radar[2]),data=gridline$mid1$label,size=grid.label.size*0.8, hjust=1)
-        base <- base + geom_text(aes(x=x,y=y,label=values.radar[3]),data=gridline$mid2$label,size=grid.label.size*0.8, hjust=1)
-        base <- base + geom_text(aes(x=x,y=y,label=values.radar[4]),data=gridline$mid3$label,size=grid.label.size*0.8, hjust=1)
-        base <- base + geom_text(aes(x=x,y=y,label=values.radar[5]),data=gridline$mid4$label,size=grid.label.size*0.8, hjust=1)
+        base <- base + geom_text(aes(x=x,y=y,label=values.radar[2]),data=gridline$mid1$label,size=grid.label.size*0.8, hjust=1, color = grid.labels.color)
+        base <- base + geom_text(aes(x=x,y=y,label=values.radar[3]),data=gridline$mid2$label,size=grid.label.size*0.8, hjust=1, color = grid.labels.color)
+        base <- base + geom_text(aes(x=x,y=y,label=values.radar[4]),data=gridline$mid3$label,size=grid.label.size*0.8, hjust=1, color = grid.labels.color)
+        base <- base + geom_text(aes(x=x,y=y,label=values.radar[5]),data=gridline$mid4$label,size=grid.label.size*0.8, hjust=1, color = grid.labels.color)
         }
     }else{
       return("Error: 'webtype' only contains two types ('mini' and 'lux') so far.  ")
@@ -592,7 +594,7 @@ ggradar2 <- function(plot.data,
     # ... + centre.y label if required [i.e. value of y at centre of plot circle]
     if (label.centre.y==TRUE) {
       centre.y.label <- data.frame(x=0, y=0, text=as.character(centre.y))
-      base <- base + geom_text(aes(x=x,y=y,label=text),data=centre.y.label,size=grid.label.size, hjust=0.5)
+      base <- base + geom_text(aes(x=x,y=y,label=text),data=centre.y.label,size=grid.label.size, hjust=0.5, color = grid.labels.color)
       }
 
     if (!is.null(group.colours)){
