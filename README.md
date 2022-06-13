@@ -8,6 +8,36 @@ Run the code with package `devtools` installed.
 devtools::install_github("xl0418/ggradar2",dependencies=TRUE)
 ```
 
+# Update 13th June 2022
+
+A new feature is implemented in the plot function. Now, one can plot the confidence interval on the radar plot by providing `ci = ci.df`
+
+```R
+library(ggradar2)
+library(ggplot2)
+data(mtcars)
+mtcars.sub <- subset(mtcars,select = c("mpg", "cyl", "disp", "hp", "drat"))[1:4,]
+
+ci.h <- apply(mtcars.sub, 2, function(x) x + abs(rnorm(length(x), 0, x/10)))
+ci.h <- as.data.frame(ci.h)
+ci.h$type <- "h"
+ci.l <- apply(mtcars.sub, 2, function(x) x - abs(rnorm(length(x), 0, x/10)))
+ci.l <- as.data.frame(ci.l)
+ci.l$type <- "l"
+
+ci.df <- rbind(ci.h, ci.l)
+
+ggradar2::ggradar2(mtcars.sub, ci = ci.df, group.line.width = 1, group.point.size = 2)
+
+```
+
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/plot_radar2_2.png)
+
+Now, this feature is only valid for single radar plotting not for multi-radars yet.
+
+More features coming soon.
+
+
 # Use ggradar2
 ## Load data.
 
