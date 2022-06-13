@@ -34,6 +34,7 @@
 #' @param legend.text.size The size of the legend text.
 #' @param label.gridline.min,label.gridline.mid,label.gridline.max Turn on/off the labels at the inner grid, middle grid and outer grid.
 #' @param axis.label.color,grid.label.color Change the colors of the axis labels and grid labels.
+#' @param ci The confidence interval indicates the higher and lower boundaries.
 #' @author Liang Xu
 #' @examples
 #' library(ggradar2)
@@ -87,7 +88,8 @@ ggradar2 <- function(plot.data,
                     stripbackground = TRUE,
                     fullscore = NULL,
                     axis.labels.color = "black",
-                    grid.labels.color = "black") {
+                    grid.labels.color = "black",
+                    ci = FALSE) {
 
   # Default settings
   plot.extent.x.sf=1
@@ -143,8 +145,32 @@ ggradar2 <- function(plot.data,
       return("Error: please provide the same length of 'fullscore' as of the variables.")
     }
   }
-  df_variables <- data.frame(lapply(df_variables,
-                                    function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
+
+
+
+  # process the confidence data
+  if(class(ci) == "data.frame" ) {
+
+    hl_group <- which(colnames(ci) == "type")
+    df_h_variables <- subset(ci, type == "h")[,-hl_group]
+    df_l_variables <- subset(ci, type == "l")[,-hl_group]
+
+    max.value <- apply(df_h_variables, 2, max)
+
+    df_h_variables <- data.frame(lapply(df_h_variables,
+                                      function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
+    df_l_variables <- data.frame(lapply(rbind(df_l_variables, max.value),
+                                        function(x) scale(x, center = FALSE,
+                                                          scale = max(x, na.rm = TRUE)/grid.max)))[1:nrow(df_l_variables),]
+    df_variables <- data.frame(lapply(rbind(df_variables, max.value),
+                                      function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))[1:nrow(df_variables),]
+  } else {
+    df_variables <- data.frame(lapply(df_variables,
+                                      function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
+  }
+
+
+
 
   # If provided full scores, after rescale the data remove the full score row.
   if(!is.null(fullscore)){
@@ -154,6 +180,14 @@ ggradar2 <- function(plot.data,
 
   plot.data <-  cbind(plot.data$group,df_variables)
   names(plot.data)[1] <- 'group'
+
+  # process the confidence data
+  if(class(ci) == "data.frame" ) {
+    h.data <- cbind(plot.data$group,df_h_variables)
+    l.data <- cbind(plot.data$group,df_l_variables)
+    names(h.data)[1] <- 'group'
+    names(l.data)[1] <- 'group'
+  }
 
   # Check if the axis labels are properly set up.
   if(length(axis.labels) == 1 && axis.labels == ""){
@@ -263,6 +297,23 @@ ggradar2 <- function(plot.data,
   # (b) convert into radial coords
   group <-NULL
   group$path <- CalculateGroupPath(plot.data.offset)
+
+  # If the ci data is provided, calculate the offset for the ci data
+  if(class(ci) == "data.frame" ) {
+    h.offset <- h.data
+    h.offset[,2:ncol(h.data)]<- h.data[,2:ncol(h.data)]+abs(centre.y)
+    #print(plot.data.offset)
+    # (b) convert into radial coords
+    h.group <-NULL
+    h.group$path <- CalculateGroupPath(h.offset)
+
+    l.offset <- l.data
+    l.offset[,2:ncol(l.data)]<- l.data[,2:ncol(l.data)]+abs(centre.y)
+    #print(plot.data.offset)
+    # (b) convert into radial coords
+    l.group <-NULL
+    l.group$path <- CalculateGroupPath(l.offset)
+  }
 
   #print(group$path)
   # (c) Calculate coordinates required to plot radial variable axes
@@ -538,8 +589,15 @@ ggradar2 <- function(plot.data,
               facet_wrap(~facet1)
     }else if(multiplots == FALSE){
       if(polygonfill){
-        base <- base + geom_polygon(data=group$path,aes(x=x,y=y,col = factor(group), fill = factor(group)),
-                                    alpha=polygonfill.transparency,show.legend = F)
+        if(class(ci) == "data.frame") {
+          hl.group.path <- rbind(h.group$path, l.group$path)
+          base <- base + geom_polygon(data=hl.group.path,aes(x=x,y=y, fill = factor(group)),
+                                      alpha=polygonfill.transparency,show.legend = F)
+        } else {
+          base <- base + geom_polygon(data=group$path,aes(x=x,y=y,col = factor(group), fill = factor(group)),
+                                      alpha=polygonfill.transparency,show.legend = F)
+        }
+
       }
 
       # ... + group (cluster) 'paths'

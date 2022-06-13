@@ -47,7 +47,8 @@ ggradar2(
   stripbackground = TRUE,
   fullscore = NULL,
   axis.labels.color = "black",
-  grid.labels.color = "black"
+  grid.labels.color = "black",
+  ci = FALSE
 )
 }
 \arguments{
@@ -118,6 +119,8 @@ ggradar2(
 \item{stripbackground}{Turn on/off the background for the panels of multiple plots.}
 
 \item{fullscore}{Set full scores to your values.}
+
+\item{ci}{The confidence interval indicates the higher and lower boundaries.}
 
 \item{axis.label.color, grid.label.color}{Change the colors of the axis labels and grid labels.}
 }
