@@ -7,7 +7,6 @@
 ggradar2(
   plot.data,
   base.size = 20,
-  webtype = "mini",
   axis.labels = "",
   grid.min = 0,
   grid.max = 1,
@@ -23,10 +22,9 @@ ggradar2(
   gridline.max.colour = "grey",
   grid.label.size = 6,
   gridline.label.offset = -0.1 * (grid.max - centre.y),
-  label.gridline.min = TRUE,
-  label.gridline.mid = TRUE,
-  label.gridline.max = TRUE,
-  gridline.label = NULL,
+  label.gridline.opener = TRUE,
+  gridline.label = seq(0, 100, 20),
+  gridline.label.type = "percentage",
   axis.label.offset = 1.15,
   axis.label.size = 5,
   axis.line.colour = "grey",
@@ -56,8 +54,6 @@ ggradar2(
 
 \item{base.size}{The size of radar chart. The default value is 20.}
 
-\item{webtype}{Value "mini" sets a web type with 3 grid lines while "lux" sets a type with 5 grid lines. Default setting is "mini".}
-
 \item{axis.labels}{The label of each column in your data is plotted around the radar.}
 
 \item{grid.min, grid.max}{Rescale your values in this range.}
@@ -78,9 +74,11 @@ ggradar2(
 
 \item{gridline.label.offset}{The offset of grid labels.}
 
-\item{label.gridline.min, label.gridline.mid, label.gridline.max}{Turn on/off the labels at the inner grid, middle grid and outer grid.}
+\item{label.gridline.opener}{Turn on/off the labels at the inner grid, middle grid and outer grid.}
 
-\item{gridline.label}{The default setting is the percentage. Replace it with your labels.}
+\item{gridline.label}{The default setting is the percentage. Replace it with your labels for circle lines.}
+
+\item{gridline.label.type}{The type of labels of the circle lines, i.e. percentage or numeric.}
 
 \item{axis.label.offset}{The offset of axis labels.}
 
