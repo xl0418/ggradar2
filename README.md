@@ -10,6 +10,8 @@ devtools::install_github("xl0418/ggradar2",dependencies=TRUE)
 
 # Update 13th June 2022
 
+## Draw the confidence interval (error bar)
+
 A new feature is implemented in the plot function. Now, one can plot the confidence interval on the radar plot by providing `ci = ci.df`
 
 ```R
@@ -17,6 +19,9 @@ library(ggradar2)
 library(ggplot2)
 data(mtcars)
 mtcars.sub <- subset(mtcars,select = c("mpg", "cyl", "disp", "hp", "drat"))[1:4,]
+
+# Generate the upper boundary and the lower boundary of the confidence interval.
+# Note that the "type"" column indiactes the boundary types.
 
 ci.h <- apply(mtcars.sub, 2, function(x) x + abs(rnorm(length(x), 0, x/10)))
 ci.h <- as.data.frame(ci.h)
@@ -35,7 +40,20 @@ ggradar2::ggradar2(mtcars.sub, ci = ci.df, group.line.width = 1, group.point.siz
 
 Now, this feature is only valid for single radar plotting not for multi-radars yet.
 
-More features coming soon.
+## The customized scales
+
+The scales of the grid lines can be customized now. 
+
+For example, one can set 10 grid lines.
+
+```R
+ggradar2::ggradar2(mtcars.sub, ci = ci.df, gridline.label = seq(0, 100, 10),group.line.width = 1, group.point.size = 2)
+```
+
+![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/plot_3.png)
+
+
+More features are coming soon.
 
 
 # Use ggradar2
@@ -57,6 +75,7 @@ dftest = dftest[,1:7]
 ## Help document
 The interpretation of the arguments are listed [here](https://xl0418.github.io/2018/12/07/2018-12-07-ggradar2helpdocument/).
 
+Note that some arguments may be depreciated. 
 
 ## Radar charts gallery
 ### Default style
@@ -80,6 +99,9 @@ ggradar2(dftest,polygonfill = FALSE)
 ![default](https://github.com/xl0418/ggradar2gallery/blob/master/README_figures/roundnofill.png)
 
 ### Web type
+
+#### Depreciated. Replaced by the customized scales `gridline.label = seq(0, 100, 10)`
+
 A new web type 'lux' has been added by '''webtype'''
 
 mini type
