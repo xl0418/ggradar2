@@ -155,7 +155,16 @@ ggradar2 <- function(plot.data,
     df_h_variables <- subset(ci, type == "h")[,-hl_group]
     df_l_variables <- subset(ci, type == "l")[,-hl_group]
 
-    max.value <- apply(df_h_variables, 2, max)
+    # Full scores are considered if specified
+    if(!is.null(fullscore)){
+      if(length(fullscore) == ncol(df_variables)){
+        max.value <- apply(rbind(df_h_variables, fullscore), 2, max)
+      }else{
+        return("Error: please provide the same length of 'fullscore' as of the variables.")
+      }
+    } else {
+      max.value <- apply(df_h_variables, 2, max)
+    }
 
     df_h_variables <- data.frame(lapply(df_h_variables,
                                       function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
