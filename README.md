@@ -18,6 +18,9 @@ library(ggplot2)
 data(mtcars)
 mtcars.sub <- subset(mtcars,select = c("mpg", "cyl", "disp", "hp", "drat"))[1:4,]
 
+# Generate the upper boundary and the lower boundary of the confidence interval.
+# Note that the "type"" column indiactes the boundary types.
+
 ci.h <- apply(mtcars.sub, 2, function(x) x + abs(rnorm(length(x), 0, x/10)))
 ci.h <- as.data.frame(ci.h)
 ci.h$type <- "h"

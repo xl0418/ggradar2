@@ -93,7 +93,7 @@ ggradar2 <- function(plot.data,
   plot.extent.x.sf=1
   plot.extent.y.sf=1.2
   x.centre.range=0.02*(grid.max-centre.y)
-
+  num.circle <- length(gridline.label)
   # Load the data and check if subgroup is given
   if(multiplots){
     if(length(which(colnames(plot.data) == 'facet1'))==0){
@@ -205,11 +205,11 @@ ggradar2 <- function(plot.data,
 
   # Set grid.line.trend type
   if(grid.line.trend == 'increase'){
-    grid.line.width <- seq(from = grid.line.width, to = grid.line.width+5*0.2,by=0.2)
+    grid.line.width <- seq(from = grid.line.width, to = grid.line.width+num.circle*0.2,by=0.2)
   }else if(grid.line.trend == 'classic'){
-    grid.line.width <- rep(grid.line.width,6)
+    grid.line.width <- rep(grid.line.width,num.circle)
   }else if(grid.line.trend == 'decrease'){
-    grid.line.width <- rev(seq(from = grid.line.width, to = grid.line.width+5*0.2,by=0.2))
+    grid.line.width <- rev(seq(from = grid.line.width, to = grid.line.width+num.circle*0.2,by=0.2))
   }else{
     return("Error: 'grid.line.trend' so far only contains two types, e.g. 'classic' and 'increase' ")
   }
@@ -336,7 +336,7 @@ ggradar2 <- function(plot.data,
   #print(axis$label)
 
   # mini type for web plotting
-  num.circle <- length(gridline.label)
+
   if(gridline.label.type == "percentage"){
     values.radar <- paste0(gridline.label, "%")
   } else if (gridline.label.type == "numeric") {
@@ -344,13 +344,6 @@ ggradar2 <- function(plot.data,
   }
   grid.mids <- seq(grid.min, grid.max, (grid.max - grid.min)/(num.circle -1) )
 
-  gridline <- NULL
-  for (gridline.level in c(1: (num.circle) )) {
-    gridline[[paste0("level", gridline.level)]][["path"]] <- funcCircleCoords(c(0,0),
-                                                                              grid.mids[gridline.level]+abs(centre.y),npoints = 360)
-    gridline[[paste0("level", gridline.level)]][["label"]] <- data.frame(x=gridline.label.offset,y=grid.mids[gridline.level]+abs(centre.y),
-                                     text=as.character(grid.mids[gridline.level]))
-  }
 
 
   ### Start building up the radar plot
@@ -399,6 +392,13 @@ ggradar2 <- function(plot.data,
 
 
   if(radarshape == "round"){
+    gridline <- NULL
+    for (gridline.level in c(1: (num.circle) )) {
+      gridline[[paste0("level", gridline.level)]][["path"]] <- funcCircleCoords(c(0,0),grid.mids[gridline.level]+abs(centre.y),npoints = 360)
+      gridline[[paste0("level", gridline.level)]][["label"]] <- data.frame(x=gridline.label.offset,y=grid.mids[gridline.level]+abs(centre.y),
+                                                                           text=as.character(grid.mids[gridline.level]))
+    }
+
     for (gridline.level in c(1: (num.circle) )) {
       if (gridline.level == 1){
         gridline.linetype <- gridline.min.linetype
@@ -424,22 +424,31 @@ ggradar2 <- function(plot.data,
       axis$outerpath <- axis$path[evenindex,]
       axis$innerpath <- rbind(axis$innerpath,head(axis$innerpath,1))
       axis$outerpath <- rbind(axis$outerpath,head(axis$outerpath,1))
-      for(line.count in c(1:(num.circle - 2))) {
-        axis[[paste0("mid", line.count)]] <- (-axis$innerpath+axis$outerpath) * line.count/num.circle+axis$innerpath
+      gridline <- NULL
+      gridline[[paste0("level", 1)]][["path"]] <- axis$innerpath
+      gridline[[paste0("level", 1)]][["label"]] <- data.frame(x=gridline.label.offset,y=grid.mids[1]+abs(centre.y),
+                                                                           text=as.character(grid.mids[1]))
+      for(line.count in c(2:(num.circle - 1))) {
+        gridline[[paste0("level", line.count)]][["path"]] <- (-axis$innerpath+axis$outerpath) * line.count/num.circle+axis$innerpath
+        gridline[[paste0("level", line.count)]][["label"]] <- data.frame(x=gridline.label.offset,y=grid.mids[line.count]+abs(centre.y),
+                                          text=as.character(grid.mids[line.count]))
       }
+      gridline[[paste0("level", num.circle)]][["path"]] <- axis$outerpath
+      gridline[[paste0("level", num.circle)]][["label"]] <- data.frame(x=gridline.label.offset,y=grid.mids[num.circle]+abs(centre.y),
+                                                 text=as.character(grid.mids[num.circle]))
 
-      for(line.count in c(1:(num.circle))) {
-        if (gridline.level == 1){
+      for(line.count in c(1:num.circle)) {
+        if (line.count == 1){
           gridline.linetype <- gridline.min.linetype
           gridline.colour <- gridline.min.colour
-        } else if (gridline.level == num.circle) {
+        } else if (line.count == num.circle) {
           gridline.linetype <- gridline.max.linetype
           gridline.colour <- gridline.max.colour
         } else{
           gridline.linetype <- gridline.mid.linetype
           gridline.colour <- gridline.mid.colour
         }
-        base <- base + geom_path(data = axis[[line.count]],aes(x=x,y=y),
+        base <- base + geom_path(data = gridline[[line.count]]$path,aes(x=x,y=y),
                                 lty=gridline.linetype,colour=gridline.colour,size=grid.line.width[line.count])
       }
 
@@ -464,7 +473,7 @@ ggradar2 <- function(plot.data,
                                   alpha=background.circle.transparency)
     }else if(radarshape == 'sharp'){
       #  + background polygon  against which to plot radar data
-      base <- base + geom_polygon(data=axis$outerpath,aes(x=x,y=y),
+      base <- base + geom_polygon(data=gridline[[num.circle]]$path,aes(x=x,y=y),
                                   fill=background.circle.colour,
                                   alpha=background.circle.transparency)
     }else{
@@ -546,7 +555,7 @@ ggradar2 <- function(plot.data,
 
     # ... + grid-line labels (max; mid; min)
 
-    if (label.gridline.opener==TRUE) {
+    if (label.gridline.opener) {
       for(line.count in c(1:(num.circle))){
         base <- base + geom_text(aes(x=x,y=y),label=values.radar[line.count],
                                  data=gridline[[line.count]]$label,size=grid.label.size*0.8, hjust=1, color = grid.labels.color)
