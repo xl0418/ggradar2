@@ -590,8 +590,11 @@ ggradar2 <- function(plot.data,
     }else if(multiplots == FALSE){
       if(polygonfill){
         if(class(ci) == "data.frame") {
+          h.group$subid <- 1L
+          l.group$subid <- 2L
           hl.group.path <- rbind(h.group$path, l.group$path)
-          base <- base + geom_polygon(data=hl.group.path,aes(x=x,y=y, fill = factor(group)),
+          hl.group.path$subid <- rep(c(1L, 2L), each = nrow(h.group$path))
+          base <- base + geom_polygon(data=hl.group.path,aes(x=x,y=y,  fill = factor(group), subgroup = subid),
                                       alpha=polygonfill.transparency,show.legend = F)
         } else {
           base <- base + geom_polygon(data=group$path,aes(x=x,y=y,col = factor(group), fill = factor(group)),
