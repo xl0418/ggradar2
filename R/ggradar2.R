@@ -137,12 +137,13 @@ ggradar2 <- function(plot.data,
   # Extract names of the variables from the data frame except the group names.
   var.names <- colnames(plot.data)[-col_group]
   df_variables <-  plot.data[,-col_group]
+  valid.data.nrow <- nrow(df_variables)
   # Full scores are considered if specified
   if(!is.null(fullscore)){
     if(length(fullscore) == ncol(df_variables)){
-      df_variables <- rbind(fullscore,df_variables)
+      df_variables <- rbind(df_variables, fullscore)
     }else{
-      return("Error: please provide the same length of 'fullscore' as of the variables.")
+      return(print("Error: please provide the same length of 'fullscore' as of the variables."))
     }
   }
 
@@ -166,25 +167,18 @@ ggradar2 <- function(plot.data,
       max.value <- apply(df_h_variables, 2, max)
     }
 
-    df_h_variables <- data.frame(lapply(df_h_variables,
-                                      function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
+    df_h_variables <- data.frame(lapply(rbind(df_h_variables, max.value),
+                                      function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))[1:valid.data.nrow,]
     df_l_variables <- data.frame(lapply(rbind(df_l_variables, max.value),
                                         function(x) scale(x, center = FALSE,
-                                                          scale = max(x, na.rm = TRUE)/grid.max)))[1:nrow(df_l_variables),]
+                                                          scale = max(x, na.rm = TRUE)/grid.max)))[1:valid.data.nrow,]
     df_variables <- data.frame(lapply(rbind(df_variables, max.value),
-                                      function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))[1:nrow(df_variables),]
+                                      function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))[1:valid.data.nrow,]
   } else {
     df_variables <- data.frame(lapply(df_variables,
                                       function(x) scale(x, center = FALSE, scale = max(x, na.rm = TRUE)/grid.max)))
   }
 
-
-
-
-  # If provided full scores, after rescale the data remove the full score row.
-  if(!is.null(fullscore)){
-    df_variables <- df_variables[-1,]
-  }
   # Get rid of the full scores as we don't want to plot them
 
   plot.data <-  cbind(plot.data$group,df_variables)
