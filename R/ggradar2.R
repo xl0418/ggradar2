@@ -131,6 +131,7 @@ ggradar2 <- function(plot.data,
 
   }
 
+
   col_group = which(colnames(plot.data)=='group')
   # Extract names of the variables from the data frame except the group names.
   var.names <- colnames(plot.data)[-col_group]
@@ -178,8 +179,11 @@ ggradar2 <- function(plot.data,
   }
 
   # Get rid of the full scores as we don't want to plot them
-
-  plot.data <-  cbind(plot.data$group,df_variables)
+  if(!is.null(fullscore)){
+    plot.data <-  cbind(plot.data$group,df_variables[-nrow(df_variables),])
+  } else {
+    plot.data <-  cbind(plot.data$group,df_variables)
+  }
   names(plot.data)[1] <- 'group'
 
   # process the confidence data
