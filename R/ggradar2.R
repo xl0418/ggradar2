@@ -180,7 +180,7 @@ ggradar2 <- function(plot.data,
 
   # Get rid of the full scores as we don't want to plot them
   if(!is.null(fullscore)){
-    plot.data <-  cbind(plot.data$group,df_variables[1:valid.data.nrow,]) # bug fixed remove [-nrow(df_variables),] -- 2.1.2025
+    plot.data <-  cbind(plot.data$group,df_variables[1:valid.data.nrow,]) # bug fixed -- 2.6.2025
   } else {
     plot.data <-  cbind(plot.data$group,df_variables)
   }
